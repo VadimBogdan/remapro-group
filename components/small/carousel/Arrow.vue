@@ -33,7 +33,7 @@
 .arrow {
   user-select: none;
   position: absolute;
-  width: auto;
-  height: auto;
+  width: 48px;
+  height: 48px;
 }
 </style>

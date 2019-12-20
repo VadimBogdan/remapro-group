@@ -41,7 +41,7 @@ export default {
   modules: ['@nuxtjs/pwa', '@nuxtjs/style-resources'],
   styleResources: {
     // your settings here
-    scss: ['~assets/scss/mixin.scss', '~assets/scss/variables.scss']
+    scss: ['~assets/scss/mixin.scss', '~assets/scss/variables.scss', '~assets/scss/globalclasses.scss']
   },
   /*
    ** Build configuration

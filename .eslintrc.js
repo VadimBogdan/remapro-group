@@ -1,23 +1,13 @@
 module.exports = {
   root: true,
-  env: {
-    browser: true,
-    node: true
-  },
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: "babel-eslint",
+    sourceType: "module"
   },
-  extends: ['@nuxtjs', 'plugin:nuxt/recommended'],
-  // add your custom rules here
+  extends: [
+    "@nuxtjs",
+  ],
   rules: {
-    quotes: [2, 'single', { avoidEscape: true }],
-    'space-before-function-paren': [
-      'error',
-      {
-        anonymous: 'always',
-        named: 'never',
-        asyncArrow: 'always'
-      }
-    ]
+    "space-before-function-paren": ["error", "never"],
   }
-}
+};

@@ -1,39 +1,46 @@
 <template>
   <div class="container">
-    <InfoBar class="infobar" />
-    <InfoBarFixedHelper class="infobarhelper" />
+    <NavInfoBar class="infobar" />
     <PhotoCarousel class="carousel" />
+    <Goods class="goods" />
+    <AboutUs />
+    <Form />
   </div>
 </template>
 
 <script>
-import InfoBar from '@/components/InfoBar.vue'
 import PhotoCarousel from '@/components/PhotoCarousel'
-import InfoBarFixedHelper from '@/components/InfoBarFixedHelper'
+import NavInfoBar from '@/components/NavInfoBar'
+import AboutUs from '@/components/AboutUs'
+import Goods from '@/components/Goods'
+import Form from '@/components/ContactUsForm'
 
 export default {
   components: {
-    InfoBar,
     PhotoCarousel,
-    InfoBarFixedHelper
+    NavInfoBar,
+    AboutUs,
+    Goods,
+    Form
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .container {
-  .infobar {
-    z-index: 10;
-    background-color: white;
-  }
-  .carousel {
-    z-index: 1;
-  }
-  background-size: cover;
-  //background: url('~assets/background.jpg') no-repeat center;
-  //background-size: cover;
-  //box-shadow: inset 0px 0px 38px -17px rgba(0, 0, 0, 1);
-  overflow: auto;
-  //background: rgba(0, 0, 0, 0.725) no-repeat center;
+  display: grid;
+  grid:
+    "nav nav nav" 75px
+    "carousel carousel carousel" auto
+    ". goods ." auto
+    ". aboutUs ." auto
+    ". form ." auto
+    / 1fr minmax(150px, 1170px) 1fr;
+
+  // grid-template-columns: ;repeat(2, 1fr)
+  // grid-template-rows: 150px auto repeat(2, 1fr);
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  // background-size: cover;
 }
 </style>

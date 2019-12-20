@@ -5,10 +5,15 @@
     :style="[touchedDependentStyles, touchedIndependentStyles]"
     draggable="false"
     ondragstart="return false;"
-    @touchstart="$emit('touchstart', { clientX: $event.changedTouches[0].clientX, id: id })"
-    @touchend="$emit('touchend', { clientX: $event.changedTouches[0].clientX, id: id })"
-    @touchmove="$emit('touchmove', { clientX: $event.changedTouches[0].clientX, id: id })"
-    @touchcancel="$emit('touchcancel', { clientX: $event.changedTouches[0].clientX, id: id })"
+    @touchstart.passive="$emit('touchstart', { clientX: $event.changedTouches[0].clientX })"
+    @touchend.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
+    @touchcancel.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
+    @touchmove.passive="$emit('touchmove', { clientX: $event.changedTouches[0].clientX })"
+
+    @mousedown.passive="$emit('touchstart', { clientX: $event.x }) && (isMouseDown = true)"
+    @mousemove.passive="isMouseDown ? $emit('touchmove', { clientX: $event.x }) : 0"
+    @mouseup.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
+    @mouseout.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
   >
     <img :src="src" class="carousel_image">
     <div class="carousel_image--more">
@@ -52,8 +57,7 @@ export default {
   },
   data() {
     return {
-      touchStart: 0,
-      touchEnd: 0
+      isMouseDown: false
     }
   },
   computed: {
@@ -61,34 +65,32 @@ export default {
       if (this.touchedHelper.isDependent) {
         return
       }
-
       if (this.touchedHelper.isTouchingBackward) {
-        return {
-          left: `calc(${0}% - ${this.touchedHelper.touchStylesChangeLeftValue}px) !important`
-        }
-      } else if (this.touchedHelper.isTouchingForward) {
         return {
           left: `calc(${0}% - ${this.touchedHelper.touchStylesChangeRightValue}px) !important`
         }
+      } else if (this.touchedHelper.isTouchingForward) {
+        return {
+          left: `calc(${0}% - ${this.touchedHelper.touchStylesChangeLeftValue}px) !important`
+        }
       } else {
-        return null
+        return undefined
       }
     },
     touchedDependentStyles() {
       if (!this.touchedHelper.isDependent) {
         return
       }
-
       if (this.touchedHelper.isTouchingBackward) {
         return {
-          left: `calc(${100}% - ${this.touchedHelper.touchStylesChangeLeftValue}px) !important`
+          left: `calc(${100}% - ${this.touchedHelper.touchStylesChangeRightValue}px) !important`
         }
       } else if (this.touchedHelper.isTouchingForward) {
         return {
-          left: `calc(${-100}% - ${this.touchedHelper.touchStylesChangeRightValue}px) !important`
+          left: `calc(${-100}% - ${this.touchedHelper.touchStylesChangeLeftValue}px) !important`
         }
       } else {
-        return null
+        return undefined
       }
     },
     movingClasses() {
@@ -109,9 +111,7 @@ export default {
     touchedClass() {
       return {
         'touched_backward_dependent': this.touchedHelper.isTouchingBackward && this.touchedHelper.isDependent,
-        'touched_forward_dependent': this.touchedHelper.isTouchingForward && this.touchedHelper.isDependent,
-        'touched_forward': this.touchedHelper.isTouchingForward && !this.touchedHelper.isDependent,
-        'touched_backward': this.touchedHelper.isTouchingBackward && !this.touchedHelper.isDependent
+        'touched': this.touchedHelper.isTouchingBackward || this.touchedHelper.isTouchingForward
       }
     },
     untouchedClass() {
@@ -119,27 +119,6 @@ export default {
         'untouched_backward_dependent_slideout': this.untouchedHelper.isRecentlyUntouched,
         'untouched_backward_dependent': this.untouchedHelper.isUntouched
       }
-    }
-  },
-  methods: {
-    logging(event) {
-      console.log(event.changedTouches[0].clientX)
-    },
-    // lately rework
-    logTouchStart(event) {
-      this.touchStart = event.changedTouches[0].clientX
-    },
-    logTouchEnd(event) {
-      this.touchEnd = event.changedTouches[0].clientX
-
-      if ((this.touchStart - this.touchEnd) > 100) {
-        this.$emit('swipe-carousel-photo', { id: this.id, direction: 'backward' })
-      } else if ((this.touchStart - this.touchEnd) < -100) {
-        this.$emit('swipe-carousel-photo', { id: this.id, direction: 'forward' })
-      }
-
-      this.touchStart = 0
-      this.touchEnd = 0
     }
   }
 }
@@ -175,13 +154,7 @@ export default {
     }
   }
 }
-.touched_forward {
-  transition: none !important;
-}
-.touched_backward {
-  transition: none !important;
-}
-.touched_forward_dependent {
+.touched {
   transition: none !important;
 }
 .touched_backward_dependent {
