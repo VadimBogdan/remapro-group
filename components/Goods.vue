@@ -1,11 +1,6 @@
 <template>
   <div class="goods_container flex-container">
-    <Merchandise
-      v-for="image in images"
-      :key="image.id"
-      :src="image.src"
-      :title="image.title"
-    >
+    <Merchandise v-for="image in images" :key="image.id" :src="image.src" :title="image.title">
       <ul>
         <li v-for="content in image.contents" :key="content.id">
           {{ content.line }}
@@ -25,7 +20,7 @@ export default {
     return {
       images: [
         {
-          src: '/goods-1.png',
+          src: 'goods-1',
           title: 'Pallets EPAL',
           contents: [
             { line: 'EPAL - 1200 x 800 mm', id: 100 },
@@ -35,7 +30,7 @@ export default {
           id: 0
         },
         {
-          src: '/goods-2.png',
+          src: 'goods-2',
           title: 'CP pallets',
           contents: [
             { line: 'CP1 - 1200 x 1000 mm', id: 103 },
@@ -45,7 +40,7 @@ export default {
           id: 1
         },
         {
-          src: '/goods-3.png',
+          src: 'goods-3',
           title: 'Used pallets',
           contents: [
             { line: 'Class I (light) EPAL', id: 106 },
@@ -55,7 +50,7 @@ export default {
           id: 2
         },
         {
-          src: '/goods-4.png',
+          src: 'goods-4',
           title: 'Beech and hornbeam firewood',
           contents: [
             { line: 'Well seasoned firewood - ready for use', id: 109 },

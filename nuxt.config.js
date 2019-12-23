@@ -1,3 +1,11 @@
+const routerBase =
+  process.env.DEPLOY_ENV === 'GH_PAGES'
+    ? {
+        router: {
+          base: '/remapro-group/'
+        }
+      }
+    : {}
 export default {
   mode: 'universal',
   /*
@@ -16,6 +24,8 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
+
+  ...routerBase,
   /*
    ** Customize the progress-bar color
    */

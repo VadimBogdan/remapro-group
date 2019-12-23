@@ -1,8 +1,10 @@
 <template>
   <div class="merch_container">
-    <a><h3>{{ title }}</h3></a>
-    <slot />
-    <img :src="src" alt="merch" class="merch_image">
+    <a>
+      <h3>{{ title }}</h3>
+    </a>
+    <slot></slot>
+    <img :src="require('~/assets/merch/' + src + '.png')" alt="merch" class="merch_image" />
   </div>
 </template>
 
@@ -32,7 +34,7 @@ export default {
   }
   h3 {
     color: #242526;
-    font-family: "Open Sans";
+    font-family: 'Open Sans';
     font-weight: 600;
     font-size: 20px;
     letter-spacing: 0px;

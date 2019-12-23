@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default {
   methods: {
     swipeEffects(distance) {

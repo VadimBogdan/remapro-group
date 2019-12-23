@@ -30,11 +30,11 @@ export default {
 .container {
   display: grid;
   grid:
-    "nav nav nav" 75px
-    "carousel carousel carousel" auto
-    ". goods ." auto
-    ". aboutUs ." auto
-    ". form ." auto
+    'nav nav nav' 75px
+    'carousel carousel carousel' auto
+    '. goods .' auto
+    '. aboutUs .' auto
+    '. form .' auto
     / 1fr minmax(150px, 1170px) 1fr;
 
   // grid-template-columns: ;repeat(2, 1fr)

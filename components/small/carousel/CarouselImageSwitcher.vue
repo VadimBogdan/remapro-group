@@ -1,5 +1,5 @@
 <template>
-  <li class="carousel_image_switcher" :class="activeImageIndicationClass" @click="$emit('change-image-pos', id)" />
+  <li class="carousel_image_switcher" :class="activeImageIndicationClass" @click="$emit('change-image-pos', id)"></li>
 </template>
 
 <script>
@@ -24,8 +24,8 @@ export default {
       const indication = this.id === this.currentPhotoPos
       return {
         active_indicator: indication,
-        active_indicator_animation_1: indication && ((this.id % 3 === 0) || (this.id % 3) === 1),
-        active_indicator_animation_2: indication && (this.id % 3) === 2
+        active_indicator_animation_1: indication && (this.id % 3 === 0 || this.id % 3 === 1),
+        active_indicator_animation_2: indication && this.id % 3 === 2
       }
     }
   }

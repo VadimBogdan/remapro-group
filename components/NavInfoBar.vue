@@ -2,7 +2,7 @@
   <div ref="navContainer">
     <div class="infobar-container">
       <div ref="mobileMenu" :class="mobileMenuClass" class="mobile-menu" @click="mobileMenuHandler()">
-        <a href @click.prevent />
+        <a href @click.prevent></a>
       </div>
       <a class="remapro-logo">
         <Logo />
@@ -15,7 +15,11 @@
             </nuxt-link>
           </li>
           <li is="drop-down" :name="'Production'" :contents="['Pallets EPAL / UIC', 'Used Pallets']" />
-          <li is="drop-down" :name="'Services'" :contents="['Pallet Sales and manufacture', 'Purchase and repair of pallets']" />
+          <li
+            is="drop-down"
+            :name="'Services'"
+            :contents="['Pallet Sales and manufacture', 'Purchase and repair of pallets']"
+          />
           <li>
             <a href @click.prevent>Logistics</a>
           </li>
@@ -29,9 +33,9 @@
         <span>Acceptance of applications:</span>
         <div>
           <a href="tel:+380686757879">+(380) 68 675 78 79</a>
-          <br>
+          <br />
           <a href="tel:">+(380) 00 000 00 00</a>
-          <br>
+          <br />
           <a href="tel:">+(380) 00 000 00 00</a>
         </div>
       </div>
@@ -76,9 +80,7 @@ export default {
       navBarLocationDeterminant: {
         y: 0,
         delta(scrollY) {
-          scrollY < 0
-            ? (this.IsDescending = true)
-            : (this.IsDescending = false)
+          scrollY < 0 ? (this.IsDescending = true) : (this.IsDescending = false)
         },
         IsDescending: false
       }
@@ -135,9 +137,7 @@ export default {
     },
     handleScroll() {
       if (this.$refs.navContainer) {
-        this.navBarLocationDeterminant.delta(
-          window.scrollY - this.navBarLocationDeterminant.y
-        )
+        this.navBarLocationDeterminant.delta(window.scrollY - this.navBarLocationDeterminant.y)
         this.navBarLocationDeterminant.y = window.scrollY
 
         if (window.scrollY > 150) {
@@ -158,9 +158,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>
 
 <style lang="scss" scoped>
 .mobile-menu {
@@ -192,7 +190,7 @@ export default {
   &::after,
   a {
     border-radius: 3px;
-    content: "";
+    content: '';
     display: block;
 
     height: 5px;
@@ -212,7 +210,7 @@ export default {
   transform: translateY(-50%);
 }
 .contacts {
-  font-family: "open sans";
+  font-family: 'open sans';
   float: right;
 
   span {
@@ -281,8 +279,8 @@ export default {
     margin: 0;
   }
   // clearfix
-   /deep/ ul::after {
-    content: "";
+  /deep/ ul::after {
+    content: '';
     display: block;
     clear: both;
   }
@@ -294,10 +292,10 @@ export default {
   margin-left: 40px;
   float: left;
   > ul {
-     > li {
+    > li {
       float: left;
     }
-   /deep/ a {
+    /deep/ a {
       display: block;
       padding: 9px 10px;
       border-radius: 3px;

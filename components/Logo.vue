@@ -1,6 +1,6 @@
 <template>
   <div class="company-logo">
-    <img src="~/assets/remapro_logo.png" alt="company logo">
+    <img src="~/assets/remapro_logo.png" alt="company logo" />
   </div>
 </template>
 

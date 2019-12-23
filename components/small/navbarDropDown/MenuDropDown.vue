@@ -1,13 +1,6 @@
 <template>
-  <li
-    class="drop-down-wrap"
-    @mouseenter="dropDownMouseEnter()"
-    @mouseleave="dropDownMouseLeave()"
-  >
-    <a
-      href
-      @click.prevent="dropDownClick()"
-    >{{ name }}</a>
+  <li class="drop-down-wrap" @mouseenter="dropDownMouseEnter()" @mouseleave="dropDownMouseLeave()">
+    <a href @click.prevent="dropDownClick()">{{ name }}</a>
     <ul class="drop-down">
       <li v-for="content in contents" :key="content">
         <a href class="drop-down__item" @click.prevent>{{ content }}</a>
@@ -60,8 +53,8 @@ export default {
 
 <style lang="scss" scoped>
 .drop-down-wrap {
- > a::after {
-    content: "";
+  > a::after {
+    content: '';
     display: inline-block;
     border-top: 4px solid;
     border-right: 4px solid transparent;
@@ -71,18 +64,14 @@ export default {
   }
 }
 .drop-down {
-  z-index: 5000;
-
   position: absolute;
   display: none;
-  min-width: 200px;
-
   a {
     border-radius: 0 !important;
   }
 
   &__active {
-    display: block  !important;
+    display: block !important;
     .drop-down__item {
       &:hover {
         background-color: lighten(#343148, 5) !important;

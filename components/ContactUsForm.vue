@@ -1,62 +1,83 @@
 <template>
-  <form name="contact" method="POST" data-netlify="true" class="contact">
+  <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="contact">
+    <input type="hidden" name="bot-field" />
+    <input type="hidden" name="form-name" value="contact" />
     <div class="contact__essential">
       <p>
-        Ваше имя (Обязательно)<br>
-        <span class="wpcf7-form-control-wrap your-name"><input
+        Your Name (required)
+        <br />
+        <input
+          v-model="name"
           type="text"
           name="your-name"
-          value=""
+          placeholder="John Smith"
           size="40"
-          class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
           aria-required="true"
           aria-invalid="false"
-        ></span>
+        />
       </p>
       <p>
-        Ваш Email (Обязательно)<br>
-        <span class="wpcf7-form-control-wrap your-email"><input
+        Your Email (required)
+        <br />
+        <input
+          v-model="email"
           type="email"
           name="your-email"
-          value=""
+          placeholder="youremail@gmail.com"
           size="40"
-          class="wpcf7-form-control wpcf7-text wpcf7-email wpcf7-validates-as-required wpcf7-validates-as-email"
           aria-required="true"
           aria-invalid="false"
-        ></span>
+        />
       </p>
       <p>
-        Ваш телефон (Обязательно) <br>
-        <span class="wpcf7-form-control-wrap tel-375"><input
+        Your phone number (not-required)
+        <br />
+        <input
+          v-model="tel"
           type="tel"
-          name="tel-375"
-          value=""
+          name="your-tel"
           size="40"
-          class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel"
+          placeholder="+491-111-111-1111"
           aria-required="true"
           aria-invalid="false"
-        ></span>
+        />
       </p>
     </div>
 
     <div class="contact__additionalmsg">
       <p>
-        Сообщение (Обязательно)<br>
-        <span class="wpcf7-form-control-wrap your-message"><textarea
+        Message (required)
+        <br />
+        <textarea
+          v-model="msg"
           name="your-message"
+          placeholder="I need to contact for..."
           cols="40"
           rows="10"
-          class="wpcf7-form-control wpcf7-textarea wpcf7-validates-as-required"
           aria-required="true"
           aria-invalid="false"
-        /></span>
+        ></textarea>
       </p>
     </div>
+
     <div class="form__submit">
-      <p><input type="submit" value="Отправить" class="wpcf7-form-control wpcf7-submit"></p>
+      <input type="submit" value="Submit" />
     </div>
   </form>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      name: null,
+      email: null,
+      tel: null,
+      msg: null
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .contact {
@@ -69,7 +90,6 @@
     float: left;
   }
   // &__submit {
-
   // }
 }
 </style>

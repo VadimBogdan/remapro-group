@@ -4,16 +4,22 @@
       <div class="infobar_inner_container">
         <div class="flexnav">
           <div>
-            <span>Production holding<br>
-              GK Manovar</span>
+            <span
+              >Production holding<br />
+              GK Manovar</span
+            >
           </div>
           <div>
-            <span>Acceptance of<br>
-              applications: +38 068 675 78 79</span>
+            <span
+              >Acceptance of<br />
+              applications: +38 068 675 78 79</span
+            >
           </div>
           <div>
-            <span>Ukraine, Kyiv,<br>
-              Malozemelna str. 75G, 02132, office 3</span>
+            <span
+              >Ukraine, Kyiv,<br />
+              Malozemelna str. 75G, 02132, office 3</span
+            >
           </div>
         </div>
       </div>

@@ -9,13 +9,12 @@
     @touchend.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
     @touchcancel.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
     @touchmove.passive="$emit('touchmove', { clientX: $event.changedTouches[0].clientX })"
-
     @mousedown.passive="$emit('touchstart', { clientX: $event.x }) && (isMouseDown = true)"
     @mousemove.passive="isMouseDown ? $emit('touchmove', { clientX: $event.x }) : 0"
     @mouseup.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
     @mouseout.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
   >
-    <img :src="src" class="carousel_image">
+    <img :src="require('~/assets/carousel/' + src + '.jpg')" class="carousel_image" />
     <div class="carousel_image--more">
       MORE
     </div>
@@ -95,29 +94,29 @@ export default {
     },
     movingClasses() {
       return {
-        'active_image': this.isActive,
-        'forward': this.isForwarding && !this.isActive,
-        'backward': this.isMovingBackward
+        active_image: this.isActive,
+        forward: this.isForwarding && !this.isActive,
+        backward: this.isMovingBackward
       }
     },
     hiddingShowingCarouselImageClass() {
       return {
-        'hide_anim': this.switchHelper.isHidingAnim,
-        'hide_carousel_image': this.switchHelper.isHiding,
-        'show_anim': this.switchHelper.isShowingAnim,
-        'show_carousel_image': this.switchHelper.isShowing
+        hide_anim: this.switchHelper.isHidingAnim,
+        hide_carousel_image: this.switchHelper.isHiding,
+        show_anim: this.switchHelper.isShowingAnim,
+        show_carousel_image: this.switchHelper.isShowing
       }
     },
     touchedClass() {
       return {
-        'touched_backward_dependent': this.touchedHelper.isTouchingBackward && this.touchedHelper.isDependent,
-        'touched': this.touchedHelper.isTouchingBackward || this.touchedHelper.isTouchingForward
+        touched_backward_dependent: this.touchedHelper.isTouchingBackward && this.touchedHelper.isDependent,
+        touched: this.touchedHelper.isTouchingBackward || this.touchedHelper.isTouchingForward
       }
     },
     untouchedClass() {
       return {
-        'untouched_backward_dependent_slideout': this.untouchedHelper.isRecentlyUntouched,
-        'untouched_backward_dependent': this.untouchedHelper.isUntouched
+        untouched_backward_dependent_slideout: this.untouchedHelper.isRecentlyUntouched,
+        untouched_backward_dependent: this.untouchedHelper.isUntouched
       }
     }
   }

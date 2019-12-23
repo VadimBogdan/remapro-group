@@ -1,25 +1,16 @@
 <template>
   <div class="carousel_container">
-    <Arrow
-      class="arrow_backward"
-      @click.native="photoCarouselActionsDebounced('backward')"
-    />
-    <Arrow
-      class="arrow_forward"
-      @click.native="photoCarouselActionsDebounced('forward')"
-    />
+    <Arrow class="arrow_backward" @click.native="photoCarouselActionsDebounced('backward')" />
+    <Arrow class="arrow_forward" @click.native="photoCarouselActionsDebounced('forward')" />
     <div>
       <CarouselImage
         v-for="image in images"
         :key="image.id"
         v-bind="image"
-
         @swipe-carousel-photo="swipeCarouselPhoto($event.direction, $event.id)"
-
         @touchmove.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
         @touchstart.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
         @touchend.passive="photoCarouselActionsDebounced('swipeClear')"
-
         @mousemove.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
       />
       <ul class="switchers-container">
@@ -65,69 +56,93 @@ export default {
       photosQuantity: 0,
       images: [
         {
-          src: '/carousel-1.jpg',
+          src: 'carousel-1',
           id: 0,
           isActive: true,
           isForwarding: false,
           isMovingBackward: false,
-          touchedHelper: { isTouchingBackward: false,
+          touchedHelper: {
+            isTouchingBackward: false,
             isTouchingForward: false,
             isDependent: null,
             touchStyles: null,
             touchStylesChangeLeftValue: 0,
-            touchStylesChangeRightValue: 0 },
+            touchStylesChangeRightValue: 0
+          },
           untouchedHelper: {
             isRecentlyUntouched: false,
             isUntouched: false
           },
-          switchHelper: { isHiding: false, isShowing: false, isHidingAnim: false, isShowingAnim: false }
+          switchHelper: {
+            isHiding: false,
+            isShowing: false,
+            isHidingAnim: false,
+            isShowingAnim: false
+          }
         },
         {
-          src: '/carousel-2.jpg',
+          src: 'carousel-2',
           id: 1,
           isActive: false,
           isForwarding: false,
           isMovingBackward: false,
-          touchedHelper: { isTouchingBackward: false,
+          touchedHelper: {
+            isTouchingBackward: false,
             isTouchingForward: false,
             isDependent: null,
             touchStyles: null,
             touchStylesChangeLeftValue: 0,
-            touchStylesChangeRightValue: 0 },
+            touchStylesChangeRightValue: 0
+          },
           untouchedHelper: {
             isRecentlyUntouched: false,
             isUntouched: false
           },
-          switchHelper: { isHiding: false, isShowing: false, isHidingAnim: false, isShowingAnim: false }
+          switchHelper: {
+            isHiding: false,
+            isShowing: false,
+            isHidingAnim: false,
+            isShowingAnim: false
+          }
         },
         {
-          src: '/carousel-3.jpg',
+          src: 'carousel-3',
           id: 2,
           isActive: false,
           isForwarding: false,
           isMovingBackward: false,
-          touchedHelper: { isTouchingBackward: false,
+          touchedHelper: {
+            isTouchingBackward: false,
             isTouchingForward: false,
             isDependent: null,
             touchStyles: null,
             touchStylesChangeLeftValue: 0,
-            touchStylesChangeRightValue: 0 },
+            touchStylesChangeRightValue: 0
+          },
           untouchedHelper: {
             isRecentlyUntouched: false,
             isUntouched: false
           },
-          switchHelper: { isHiding: false, isShowing: false, isHidingAnim: false, isShowingAnim: false }
+          switchHelper: {
+            isHiding: false,
+            isShowing: false,
+            isHidingAnim: false,
+            isShowingAnim: false
+          }
         }
       ]
     }
   },
   created() {
-    this.photoCarouselActionsDebounced = this.throttlingSpecial({
-      forward: this.twistCarousel.bind(this, 'forward'),
-      backward: this.twistCarousel.bind(this, 'backward'),
-      switch: this.switchChangeImage,
-      swipeClear: this.swipeEffectsClear
-    }, 725)
+    this.photoCarouselActionsDebounced = this.throttlingSpecial(
+      {
+        forward: this.twistCarousel.bind(this, 'forward'),
+        backward: this.twistCarousel.bind(this, 'backward'),
+        switch: this.switchChangeImage,
+        swipeClear: this.swipeEffectsClear
+      },
+      725
+    )
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.changeMaxLeftScrolling)
