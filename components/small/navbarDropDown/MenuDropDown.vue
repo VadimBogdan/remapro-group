@@ -86,4 +86,9 @@ export default {
   background-color: #343148;
   color: white !important;
 }
+@media screen and (max-width: 930px) {
+  .drop-down {
+    position: static;
+  }
+}
 </style>

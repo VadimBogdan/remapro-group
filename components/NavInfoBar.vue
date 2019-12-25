@@ -124,6 +124,7 @@ export default {
     handleResize() {
       if (window.matchMedia('(min-width: 930px)').matches) {
         this.$refs.nav.style.display = 'block'
+        document.documentElement.style.overflow = ''
         this.mobileMenuIndicator = false
       } else {
         this.$refs.nav.style.display = 'none'
@@ -157,8 +158,6 @@ export default {
   }
 }
 </script>
-
-<style lang="scss"></style>
 
 <style lang="scss" scoped>
 .mobile-menu {
@@ -344,9 +343,7 @@ export default {
       width: 100%;
     }
   }
-  /deep/ .drop-down {
-    position: static;
-  }
+
   .mobile-menu {
     display: block;
   }
