@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     activeImageIndicationClass() {
-      const indication = this.id === this.currentPhotoPos
+      var indication = this.id === this.currentPhotoPos
       return {
         active_indicator: indication,
         active_indicator_animation_1: indication && (this.id % 3 === 0 || this.id % 3 === 1),

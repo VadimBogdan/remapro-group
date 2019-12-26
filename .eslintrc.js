@@ -26,6 +26,7 @@ module.exports = {
     //"plugin:prettier/recommended"
   ],
   rules: {
+    // "no-var": 0,
     "space-before-function-paren": ["error", "never"],
     "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",

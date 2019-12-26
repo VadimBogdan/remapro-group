@@ -99,19 +99,19 @@ export default {
     },
     unfoc(ev) {
       Object.keys(this.$data).forEach(name => {
-        if (this.$data[name].val !== '' && name === ev.target.getAttribute('name').match(/(?<=-)\w+/)[0]) {
+        if (this.$data[name].val !== '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
           ev.target.labels[0].classList.add('good--label')
           ev.target.classList.add('good--input')
           ev.target.labels[0].classList.remove('bad--label')
           ev.target.classList.remove('bad--input')
           this.$data[name].valid = true
-        } else if (this.$data[name].val === '' && name === ev.target.getAttribute('name').match(/(?<=-)\w+/)[0]) {
+        } else if (this.$data[name].val === '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
           ev.target.labels[0].classList.add('bad--label')
           ev.target.classList.add('bad--input')
           ev.target.labels[0].classList.remove('good--label')
           ev.target.classList.remove('good--input')
           this.$data[name].valid = false
-        } else if (this.$data[name].val === '' && name !== ev.target.getAttribute('name').match(/(?<=-)\w+/)[0]) {
+        } else if (this.$data[name].val === '' && name !== ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
           const voidInput = document.getElementsByName('your-' + name)[0]
           voidInput.labels[0].classList.remove('good--label')
           voidInput.classList.remove('good--input')

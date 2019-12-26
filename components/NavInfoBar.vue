@@ -1,8 +1,8 @@
 <template>
   <div ref="navContainer">
     <div class="infobar-container">
-      <div ref="mobileMenu" :class="mobileMenuClass" class="mobile-menu" @click="mobileMenuHandler()">
-        <a href @click.prevent></a>
+      <div ref="mobileMenu" :class="mobileMenuClass" class="mobile-menu" @click.prevent="mobileMenuHandler()">
+        <a @click.prevent></a>
       </div>
       <a class="remapro-logo">
         <Logo />
@@ -34,9 +34,9 @@
         <div>
           <a href="tel:+380686757879">+(380) 68 675 78 79</a>
           <br />
-          <a href="tel:">+(380) 00 000 00 00</a>
+          <a href="tel:+38000000000">+(380) 00 000 00 00</a>
           <br />
-          <a href="tel:">+(380) 00 000 00 00</a>
+          <a href="tel:+38000000000">+(380) 00 000 00 00</a>
         </div>
       </div>
       <div class="choose-language">
@@ -131,7 +131,7 @@ export default {
       }
     },
     handleKeyDown() {
-      const key = event.key
+      var key = event.key
       if (key === 'Escape' && this.mobileMenuIndicator) {
         this.mobileMenuHandler()
       }

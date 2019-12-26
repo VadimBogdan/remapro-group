@@ -124,7 +124,7 @@ export default {
       this.photoCarouselActionsDebounced(direction, id)
     },
     throttlingSimple(f, ms) {
-      let isCooldown = false
+      var isCooldown = false
 
       return function() {
         if (isCooldown) {
@@ -139,7 +139,7 @@ export default {
       }
     },
     throttlingSpecial(obj, ms) {
-      let isCooldown = false
+      var isCooldown = false
 
       return function(key, ...optional) {
         if (isCooldown) {
@@ -158,7 +158,7 @@ export default {
       if (id === this.currentPhotoPos) {
         return
       }
-      const previousPhotoPos = this.currentPhotoPos
+      var previousPhotoPos = this.currentPhotoPos
       this.currentPhotoPos = id
       this.images[previousPhotoPos].switchHelper.isHidingAnim = true
       setTimeout(() => {
@@ -176,7 +176,7 @@ export default {
       }, 650)
     },
     twistCarousel(direction) {
-      const previousPhotoPos = this.currentPhotoPos
+      var previousPhotoPos = this.currentPhotoPos
       if (direction === 'forward') {
         this.currentPhotoPos++
         if (this.photosQuantity === this.currentPhotoPos) {

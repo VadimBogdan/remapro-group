@@ -24,6 +24,7 @@ body {
 ::before {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  cursor: pointer;
 }
 a {
   text-decoration: none;
