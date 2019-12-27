@@ -1,6 +1,6 @@
 <template>
   <div
-    class="carousel_image_container"
+    class="carouselItem"
     :class="[movingClasses, hiddingShowingCarouselImageClass, touchedClass, untouchedClass]"
     :style="[touchedDependentStyles, touchedIndependentStyles]"
     draggable="false"
@@ -14,10 +14,20 @@
     @mouseup.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
     @mouseout.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
   >
-    <img :src="require('~/assets/carousel/' + src + '.jpg')" class="carousel_image" />
-    <div class="carousel_image--more">
-      MORE
+    <img :src="require('~/assets/carousel/' + src + '.jpg')" class="carouselItem__image" />
+    <div class="carouselItem__innerElements--banner">
+      <h2>
+        <slot name="header"
+          >Certified EPAL, UIC and CP pallets <br />
+          of top quality</slot
+        >
+      </h2>
+      <p><slot name="paragraph">Production, sales, purchase, repair, and delivery of pallets</slot></p>
     </div>
+    <ul class="carouselItem__innerElements--buttonsContainer">
+      <li><a href="" class="carouselItem__innerElements--details" @click.prevent>Details</a></li>
+      <li><a href=".contact" class="carouselItem__innerElements--contacts" @click.prevent>Contacts</a></li>
+    </ul>
   </div>
 </template>
 
@@ -102,9 +112,9 @@ export default {
     hiddingShowingCarouselImageClass() {
       return {
         hide_anim: this.switchHelper.isHidingAnim,
-        hide_carousel_image: this.switchHelper.isHiding,
+        hide_carouselItem__image: this.switchHelper.isHiding,
         show_anim: this.switchHelper.isShowingAnim,
-        show_carousel_image: this.switchHelper.isShowing
+        show_carouselItem__image: this.switchHelper.isShowing
       }
     },
     touchedClass() {
@@ -124,7 +134,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.carousel_image_container {
+.carouselItem {
   position: absolute;
   transition: all 650ms ease-in-out;
   user-select: none;
@@ -132,7 +142,84 @@ export default {
   width: 100%;
   height: 100%;
   left: -100%;
-  .carousel_image {
+  &__innerElements {
+    &--buttonsContainer {
+      > li {
+        float: left;
+        margin: 0 20px;
+      }
+      position: absolute;
+      list-style: none;
+      left: 50%;
+      top: 60%;
+      transform: translate(-50%);
+      z-index: 1000;
+      padding: 0;
+      margin: 0;
+      &::after {
+        content: ' ';
+        visibility: hidden;
+        display: block;
+        height: 0;
+        clear: both;
+      }
+    }
+    &--details,
+    &--contacts {
+      border-radius: 3px;
+      color: white;
+      font-family: 'Open sans';
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+
+      display: inline-block;
+
+      padding: 10px 25px;
+
+      text-transform: uppercase;
+
+      background-color: #000000;
+      box-shadow: 0 3px 0 0 #3f3b57;
+
+      &:active {
+        box-shadow: 0 0px 0 0 #3f3b57;
+        transform: translateY(3px);
+      }
+    }
+    &--banner {
+      position: relative;
+      z-index: 1000;
+      font-family: 'Open Sans';
+      max-width: 920px;
+      margin: 0 auto;
+      color: #000;
+      background-color: rgba(255, 255, 255, 0.75);
+      text-align: center;
+
+      flex: 1 100%;
+      > h2 {
+        display: inline-block;
+        font-size: 34px;
+
+        font-weight: bold;
+        line-height: 1.5;
+        text-align: center;
+
+        margin: 0 0 0px;
+      }
+      > p {
+        font-size: 18px;
+        line-height: 2;
+        text-align: center;
+        display: inline-block;
+        letter-spacing: 1px;
+        text-shadow: 0 0px 1px rgba(155, 155, 155, 0.7);
+      }
+    }
+  }
+
+  .carouselItem__image {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -185,11 +272,11 @@ export default {
     left: 0;
   }
 }
-.hide_carousel_image {
+.hide_carouselItem__image {
   transition: none !important;
   left: -100% !important;
 }
-.show_carousel_image {
+.show_carouselItem__image {
   transition: none !important;
   left: 0 !important;
 }
@@ -198,6 +285,16 @@ export default {
 }
 .show_anim {
   animation: 0.325s shutters reverse;
+}
+@media screen and (max-width: 1150px) {
+  .carouselItem__innerElements--banner {
+    max-width: 700px;
+  }
+}
+@media screen and (max-width: 860px) {
+  .carouselItem__innerElements--banner {
+    max-width: 600px;
+  }
 }
 @keyframes shutters {
   0% {

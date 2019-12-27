@@ -85,14 +85,17 @@
     left: 50%;
     top: 65%;
     transform: translate(-50%);
-    a {
-      font-style: italic;
-      color: black;
-      background-size: 1px 200px;
-      &:hover {
-        background: linear-gradient(45deg, rgba(255, 0, 0, 1) 0%, rgba(7, 27, 134, 1) 67%, rgba(255, 0, 0, 1) 100%);
-        background-clip: text;
-        color: transparent;
+    span {
+      white-space: nowrap;
+      a {
+        font-style: italic;
+        color: black;
+        background-size: 1px 200px;
+        &:hover {
+          background: linear-gradient(45deg, rgba(255, 0, 0, 1) 0%, rgba(7, 27, 134, 1) 67%, rgba(255, 0, 0, 1) 100%);
+          background-clip: text;
+          color: transparent;
+        }
       }
     }
   }

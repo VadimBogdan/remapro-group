@@ -12,7 +12,10 @@
         @touchstart.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
         @touchend.passive="photoCarouselActionsDebounced('swipeClear')"
         @mousemove.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
-      />
+      >
+        <template v-slot:header>{{ image.header }}</template>
+        <template v-slot:paragraph>{{ image.paragraph }}</template>
+      </CarouselImage>
       <ul class="switchers-container">
         <li
           is="CarouselImageSwitcher"
@@ -57,6 +60,8 @@ export default {
       images: [
         {
           src: 'carousel-1',
+          paragraph: 'Certified EPAL, UIC and CP pallets of top quality',
+          header: 'Production, sales, purchase, repair, and delivery of pallets',
           id: 0,
           isActive: true,
           isForwarding: false,
@@ -82,6 +87,10 @@ export default {
         },
         {
           src: 'carousel-2',
+          paragraph:
+            'Deliveries via our own transport. Guaranteed delivery of any volume of goods' +
+            'all over Ukraine and Europe every day of the year: 365 / 7 / 24 service',
+          header: 'Logistics',
           id: 1,
           isActive: false,
           isForwarding: false,
@@ -107,6 +116,10 @@ export default {
         },
         {
           src: 'carousel-3',
+          paragraph:
+            'All types of pallets. Wholesale and individual orders.' +
+            'We purchase pallets all over Ukraine and deliver it via our own transport',
+          header: 'Purchase, repair and sales of used pallets',
           id: 2,
           isActive: false,
           isForwarding: false,
@@ -150,13 +163,13 @@ export default {
   mounted() {
     window.addEventListener('resize', this.changeMaxLeftScrolling)
 
-    this.imageMaxWidth = document.getElementsByClassName('carousel_image_container')[0].clientWidth
+    this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
 
-    this.photosQuantity = document.getElementsByClassName('carousel_image_container').length
+    this.photosQuantity = document.getElementsByClassName('carouselItem').length
   },
   methods: {
     changeMaxLeftScrolling() {
-      this.imageMaxWidth = document.getElementsByClassName('carousel_image_container')[0].clientWidth
+      this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
     }
   }
 }
@@ -168,12 +181,14 @@ export default {
   cursor: pointer;
   height: 350px;
   width: 100%;
-  // min-width: 150px;
+  max-width: 1680px;
   align-self: end;
   position: relative;
   overflow: hidden;
   background: black;
   z-index: 1;
+
+  margin: 0 auto;
   .arrow_backward {
     transform: rotate(180deg);
     z-index: 1000;
@@ -191,6 +206,8 @@ export default {
 
   left: 50%;
   top: 85%;
+  transform: translateX(-50%);
+  z-index: 9999;
 
   padding: 0;
   margin: 0;

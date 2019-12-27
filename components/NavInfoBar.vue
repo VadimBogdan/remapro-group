@@ -141,19 +141,17 @@ export default {
         this.navBarLocationDeterminant.delta(window.scrollY - this.navBarLocationDeterminant.y)
         this.navBarLocationDeterminant.y = window.scrollY
 
-        // console.log({ o: document.getElementById('contact--container').getBoundingClientRect() })
         if (window.scrollY > 150) {
-          if (
-            this.navBarLocationDeterminant.IsDescending &&
-            document.getElementById('contact--container').getBoundingClientRect().y >= 0 // not show on contact us form
-          ) {
-            this.$refs.navContainer.style.transform = 'translateY(0px)'
+          if (this.navBarLocationDeterminant.IsDescending) {
+            // &&
+            // document.getElementById('contact--container').getBoundingClientRect().y >= 0 // not show on contact us form
+            this.$refs.navContainer.style.transform = 'translateY(0px) translateX(-50%)'
             this.$refs.mobileMenu.onclick = null
           } else {
-            this.$refs.navContainer.style.transform = 'translateY(-75px)'
+            this.$refs.navContainer.style.transform = 'translateY(-75px) translateX(-50%)'
             this.$refs.mobileMenu.onclick = this.mobileMenuHandler
             setTimeout(() => {
-              this.$refs.navContainer.style.transform = 'translateY(-76px)'
+              this.$refs.navContainer.style.transform = 'translateY(-76px) translateX(-50%)'
             })
           }
         }
@@ -254,18 +252,20 @@ export default {
   background-color: white;
   width: 100%;
 
+  max-width: 1680px;
+  left: 50%;
+  transform: translateX(-50%);
+
   transition: transform 0.5s ease-in-out;
 
   z-index: 3000;
-
-  padding: 0 15%;
 }
 .infobar-container {
   height: 75px;
 
   position: relative;
 
-  margin: 0 100px;
+  margin: 0 350px;
 
   > *:not(.choose-language):not(.mobile-menu) {
     top: 50%;
@@ -355,29 +355,39 @@ export default {
     display: none;
   }
 }
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1615px) {
+  .infobar-container {
+    margin: 0 300px;
+  }
+}
+@media screen and (max-width: 1560px) {
+  .infobar-container {
+    margin: 0 250px;
+  }
+}
+@media screen and (max-width: 1460px) {
+  .infobar-container {
+    margin: 0 200px;
+  }
+}
+@media screen and (max-width: 1360px) {
+  .infobar-container {
+    margin: 0 150px;
+  }
+}
+@media screen and (max-width: 1260px) {
+  .infobar-container {
+    margin: 0 100px;
+  }
+}
+@media screen and (max-width: 1160px) {
   .infobar-container {
     margin: 0 50px;
   }
 }
-@media screen and (max-width: 1450px) {
+@media screen and (max-width: 1060px) {
   .infobar-container {
     margin: 0;
-  }
-}
-@media screen and (max-width: 1320px) {
-  .infobar {
-    padding: 0 10%;
-  }
-}
-@media screen and (max-width: 1160px) {
-  .infobar {
-    padding: 0 5%;
-  }
-}
-@media screen and (max-width: 1030px) {
-  .infobar {
-    padding: 0;
   }
 }
 </style>

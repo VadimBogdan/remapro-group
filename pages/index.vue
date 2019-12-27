@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <NavInfoBar class="infobar" />
-    <PhotoCarousel class="carousel" />
+    <PhotoCarousel v-show="!mobileFallback" class="carousel" />
+    <MobileFallBack v-show="mobileFallback" />
     <Goods class="goods" />
     <AboutUs />
     <ContactForm />
@@ -10,6 +11,8 @@
 </template>
 
 <script>
+import MobileFallBack from '@/components/fallbacks/MobileFallBack'
+
 import PhotoCarousel from '@/components/PhotoCarousel'
 import NavInfoBar from '@/components/NavInfoBar'
 import AboutUs from '@/components/AboutUs'
@@ -19,12 +22,42 @@ import Footer from '@/components/Footer'
 
 export default {
   components: {
+    MobileFallBack,
+
     PhotoCarousel,
     NavInfoBar,
     AboutUs,
     Goods,
     ContactForm,
     Footer
+  },
+  data() {
+    return {
+      mobileFallback: true
+    }
+  },
+  beforeUpdate() {
+    if (window.innerWidth <= 700) {
+      this.mobileFallback = true
+    } else {
+      this.mobileFallback = false
+    }
+  },
+  beforeMount() {
+    window.addEventListener('load', () => {
+      if (window.innerWidth <= 700) {
+        this.mobileFallback = true
+      } else {
+        this.mobileFallback = false
+      }
+    })
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 700) {
+        this.mobileFallback = true
+      } else {
+        this.mobileFallback = false
+      }
+    })
   }
 }
 </script>
