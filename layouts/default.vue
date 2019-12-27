@@ -10,6 +10,11 @@ body,
 div {
   margin: 0;
 }
+input,
+textarea,
+body {
+  font-size: 16px;
+}
 html,
 body {
   overflow-x: hidden;
@@ -24,7 +29,6 @@ body {
 ::before {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  cursor: pointer;
 }
 a {
   text-decoration: none;

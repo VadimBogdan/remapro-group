@@ -4,7 +4,8 @@
     <PhotoCarousel class="carousel" />
     <Goods class="goods" />
     <AboutUs />
-    <Form />
+    <ContactForm />
+    <Footer />
   </div>
 </template>
 
@@ -13,7 +14,8 @@ import PhotoCarousel from '@/components/PhotoCarousel'
 import NavInfoBar from '@/components/NavInfoBar'
 import AboutUs from '@/components/AboutUs'
 import Goods from '@/components/Goods'
-import Form from '@/components/ContactUsForm'
+import ContactForm from '@/components/ContactUsForm'
+import Footer from '@/components/Footer'
 
 export default {
   components: {
@@ -21,7 +23,8 @@ export default {
     NavInfoBar,
     AboutUs,
     Goods,
-    Form
+    ContactForm,
+    Footer
   }
 }
 </script>
@@ -35,6 +38,7 @@ export default {
     '. goods .' auto
     '. aboutUs .' auto
     '. form .' auto
+    'footer footer footer' auto
     / 1fr minmax(150px, 1170px) 1fr;
 
   // grid-template-columns: ;repeat(2, 1fr)

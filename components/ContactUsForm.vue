@@ -1,5 +1,5 @@
 <template>
-  <div class="contact--container">
+  <div id="contact--container" @click.self="removeFocus()">
     <h2>Contact us</h2>
     <form
       name="contact"
@@ -12,52 +12,54 @@
     >
       <input type="hidden" name="bot-field" />
       <input type="hidden" name="form-name" value="contact" />
-      <div class="contact__inputContainer">
-        <label for="your-name">Your Name *</label>
-        <input
-          id="your-name"
-          type="text"
-          :value="name.val"
-          name="your-name"
-          size="40"
-          aria-required="true"
-          aria-invalid="false"
-          @input="ev => (name.val = ev.target.value)"
-          @focus="foc($event)"
-          @blur="unfoc($event)"
-        />
+      <div class="contact__inputs">
+        <div class="contact__inputContainer">
+          <label for="your-name">Your Name *</label>
+          <input
+            id="your-name"
+            type="text"
+            :value="name.val"
+            name="your-name"
+            size="40"
+            aria-required="true"
+            aria-invalid="false"
+            @input="ev => (name.val = ev.target.value)"
+            @focus="foc($event)"
+            @blur="unfoc($event)"
+          />
+        </div>
+        <div class="contact__inputContainer">
+          <label for="your-email">Your Email *</label>
+          <input
+            id="your-email"
+            type="email"
+            name="your-email"
+            size="40"
+            :value="email.val"
+            aria-required="true"
+            aria-invalid="false"
+            @input="ev => (email.val = ev.target.value)"
+            @focus="foc($event)"
+            @blur="unfoc($event)"
+          />
+        </div>
+        <div class="contact__inputContainer">
+          <label for="your-tel">Your phone number</label>
+          <input
+            id="your-tel"
+            type="tel"
+            name="your-tel"
+            size="40"
+            :value="tel.val"
+            aria-required="true"
+            aria-invalid="false"
+            @input="ev => (tel.val = ev.target.value)"
+            @focus="foc($event)"
+            @blur="unfoc($event)"
+          />
+        </div>
       </div>
-      <div class="contact__inputContainer">
-        <label for="your-email">Your Email *</label>
-        <input
-          id="your-email"
-          type="email"
-          name="your-email"
-          size="40"
-          :value="email.val"
-          aria-required="true"
-          aria-invalid="false"
-          @input="ev => (email.val = ev.target.value)"
-          @focus="foc($event)"
-          @blur="unfoc($event)"
-        />
-      </div>
-      <div class="contact__inputContainer">
-        <label for="your-tel">Your phone number</label>
-        <input
-          id="your-tel"
-          type="tel"
-          name="your-tel"
-          size="40"
-          :value="tel.val"
-          aria-required="true"
-          aria-invalid="false"
-          @input="ev => (tel.val = ev.target.value)"
-          @focus="foc($event)"
-          @blur="unfoc($event)"
-        />
-      </div>
-      <div class="contact__additionalmsg">
+      <div class="contact__textareaAndButton">
         <label for="your-message">Message *</label>
         <textarea
           id="your-message"
@@ -71,14 +73,14 @@
           @focus="foc($event)"
           @blur="unfoc($event)"
         ></textarea>
+        <button id="submit-button" type="submit" @mousedown.prevent="rippleEffect($event)">
+          Send
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            <path d="M0 0h24v24H0z" fill="none" />
+          </svg>
+        </button>
       </div>
-      <button id="submit-button" type="submit" @mousedown.prevent="rippleEffect($event)">
-        Send
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          <path d="M0 0h24v24H0z" fill="none" />
-        </svg>
-      </button>
     </form>
   </div>
 </template>
@@ -99,19 +101,19 @@ export default {
     },
     unfoc(ev) {
       Object.keys(this.$data).forEach(name => {
-        if (this.$data[name].val !== '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
+        if (this.$data[name].val !== '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           ev.target.labels[0].classList.add('good--label')
           ev.target.classList.add('good--input')
           ev.target.labels[0].classList.remove('bad--label')
           ev.target.classList.remove('bad--input')
           this.$data[name].valid = true
-        } else if (this.$data[name].val === '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
+        } else if (this.$data[name].val === '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           ev.target.labels[0].classList.add('bad--label')
           ev.target.classList.add('bad--input')
           ev.target.labels[0].classList.remove('good--label')
           ev.target.classList.remove('good--input')
           this.$data[name].valid = false
-        } else if (this.$data[name].val === '' && name !== ev.target.getAttribute('name').match(/-(\w+)/)[0]) {
+        } else if (this.$data[name].val === '' && name !== ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           const voidInput = document.getElementsByName('your-' + name)[0]
           voidInput.labels[0].classList.remove('good--label')
           voidInput.classList.remove('good--input')
@@ -121,6 +123,9 @@ export default {
         }
       })
       ev.target.labels[0].classList.remove('focused')
+    },
+    removeFocus() {
+      document.activeElement.blur()
     },
     handleSubmit(ev) {
       const check = Object.keys(this.$data).some(name => {
@@ -211,9 +216,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.contact--container {
+#contact--container {
   grid-area: form;
-  // padding: 105px 20%;
   position: relative;
 }
 h2 {
@@ -230,29 +234,19 @@ h2 {
   // border-top: 50px solid transparent;
   // padding: 0 20%;
   // position: relative;
+  display: flex;
+  justify-content: space-evenly;
+  cursor: pointer;
 
-  &::after {
-    content: '';
-    display: block;
-    clear: both;
-  }
+  flex-wrap: wrap;
+
+  padding: 0 10%;
 
   font-size: 1rem;
   line-height: 1;
 
-  &__additionalmsg {
-    display: inline-block;
-    position: relative;
-    left: 270px;
-  }
   &__inputContainer {
-    clear: both;
-    float: left;
     margin-bottom: 25px;
-
-    position: relative;
-
-    left: 250px;
   }
 
   label {
@@ -334,11 +328,13 @@ button[type='submit'] {
 
   border: 0;
 
-  position: relative;
-  user-select: none;
+  // textarea placement
+  position: absolute;
+  bottom: 5px;
+  right: 25%;
 
-  outline: none;
-  left: 50px;
+  user-select: none;
+  // outline: none;
   &:hover {
     background-color: rgb(17, 82, 147);
   }
@@ -356,5 +352,44 @@ button[type='submit'] {
 
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
+}
+@media screen and (max-width: 980px) {
+  #submit-button {
+    bottom: -10px;
+    right: 35%;
+  }
+}
+@media screen and (max-width: 385px) {
+  .contact {
+    textarea,
+    input {
+      width: 290px;
+      padding: 15px 14px;
+    }
+  }
+}
+@media screen and (max-width: 320px) {
+  .contact {
+    textarea,
+    input {
+      width: 210px;
+      padding: 13.5px 14px;
+    }
+    textarea {
+      height: 180px;
+    }
+  }
+}
+@media screen and (max-width: 260px) {
+  .contact {
+    textarea,
+    input {
+      width: 160px;
+    }
+  }
+  #submit-button {
+    // bottom: -10px;
+    right: 20%;
+  }
 }
 </style>

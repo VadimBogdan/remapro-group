@@ -131,7 +131,7 @@ export default {
       }
     },
     handleKeyDown() {
-      var key = event.key
+      const key = event.key
       if (key === 'Escape' && this.mobileMenuIndicator) {
         this.mobileMenuHandler()
       }
@@ -141,8 +141,12 @@ export default {
         this.navBarLocationDeterminant.delta(window.scrollY - this.navBarLocationDeterminant.y)
         this.navBarLocationDeterminant.y = window.scrollY
 
+        // console.log({ o: document.getElementById('contact--container').getBoundingClientRect() })
         if (window.scrollY > 150) {
-          if (this.navBarLocationDeterminant.IsDescending) {
+          if (
+            this.navBarLocationDeterminant.IsDescending &&
+            document.getElementById('contact--container').getBoundingClientRect().y >= 0 // not show on contact us form
+          ) {
             this.$refs.navContainer.style.transform = 'translateY(0px)'
             this.$refs.mobileMenu.onclick = null
           } else {
