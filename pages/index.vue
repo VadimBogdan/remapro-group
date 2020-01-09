@@ -1,12 +1,10 @@
 <template>
-  <div class="container">
-    <NavInfoBar class="infobar" />
-    <PhotoCarousel v-show="!mobileFallback" class="carousel" />
-    <MobileFallBack v-show="mobileFallback" />
-    <Goods class="goods" />
+  <div>
+    <PhotoCarousel v-show="!mobileFallbackIndicator" class="carousel" />
+    <MobileFallBack v-show="mobileFallbackIndicator" />
+    <Goods />
     <AboutUs />
     <ContactForm />
-    <Footer />
   </div>
 </template>
 
@@ -14,50 +12,55 @@
 import MobileFallBack from '@/components/fallbacks/MobileFallBack'
 
 import PhotoCarousel from '@/components/PhotoCarousel'
-import NavInfoBar from '@/components/NavInfoBar'
 import AboutUs from '@/components/AboutUs'
 import Goods from '@/components/Goods'
 import ContactForm from '@/components/ContactUsForm'
-import Footer from '@/components/Footer'
 
 export default {
   components: {
     MobileFallBack,
 
     PhotoCarousel,
-    NavInfoBar,
+
     AboutUs,
     Goods,
-    ContactForm,
-    Footer
+    ContactForm
   },
   data() {
     return {
-      mobileFallback: true
+      mobileFallbackIndicator: true,
+      mobileFallback: null
     }
   },
-  beforeUpdate() {
-    if (window.innerWidth <= 700) {
-      this.mobileFallback = true
-    } else {
-      this.mobileFallback = false
-    }
+  updated() {
+    this.onRouteChange()
   },
-  beforeMount() {
-    window.addEventListener('load', () => {
-      if (window.innerWidth <= 700) {
-        this.mobileFallback = true
-      } else {
-        this.mobileFallback = false
+  mounted() {
+    this.$nuxt.$on('routeChanged', this.onRouteChange)
+    setTimeout(this.onRouteChange, 1)
+
+    window.addEventListener('load', this.onRouteChange)
+    window.addEventListener('resize', this.onRouteChange)
+  },
+  beforeDestroy() {
+    this.$nuxt.$off('routeChanged', this.onRouteChange)
+  },
+  methods: {
+    onRouteChange() {
+      this.mobileFallback = document.getElementById('mobile-fallback')
+      if (!this.mobileFallback) {
+        return
       }
-    })
-    window.addEventListener('resize', () => {
       if (window.innerWidth <= 700) {
-        this.mobileFallback = true
+        this.mobileFallbackIndicator = true
+        this.mobileFallback.style.visibility = 'visible'
+        this.mobileFallback.style.height = '500px'
       } else {
-        this.mobileFallback = false
+        this.mobileFallbackIndicator = false
+        this.mobileFallback.style.visibility = ''
+        this.mobileFallback.style.height = ''
       }
-    })
+    }
   }
 }
 </script>

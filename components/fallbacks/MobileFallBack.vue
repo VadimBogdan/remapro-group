@@ -1,7 +1,7 @@
 <template>
-  <div id="mobileFallback">
-    <div id="mobileFallback__header">
-      <div id="mobileFallback__header--mobile">
+  <div id="mobile-fallback">
+    <div id="mobile-fallback__header">
+      <div id="mobile-fallback__header--mobile">
         <span> Sales: <a href="tel:+380000000000"> +(380) 00 000 00 00</a> </span><br />
         <span> Purchasing: <a href="tel:+380000000000">+(380) 00 000 00 00</a> </span>
       </div>
@@ -12,7 +12,7 @@
         Firewood for fireplaces. Delivery all over Ukraine and Europe
       </h2>
     </div>
-    <div id="mobileFallback__header--buttons">
+    <div id="mobile-fallback__header--buttons">
       <a href="" :class="linksAnim" @click.prevent @touchstart="isTouched = true" @touchend="isTouched = false"
         >Details</a
       >
@@ -40,12 +40,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#mobileFallback {
+#mobile-fallback {
   grid-area: carousel;
-  height: 500px;
+  height: 350px;
   width: 100%;
   background: url('~assets/background.jpg');
   background-position: -500px, -500px;
+
+  visibility: hidden;
   &__header {
     width: 85%;
     margin: 25px auto;
@@ -62,6 +64,7 @@ export default {
       }
     }
     &--buttons {
+      text-align: center;
       a {
         display: block;
         margin: 10px auto;
@@ -69,7 +72,7 @@ export default {
         color: #fff;
         text-transform: uppercase;
         padding: 7px 15px;
-        text-align: center;
+
         border-radius: 5px;
         width: 60%;
 

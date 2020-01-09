@@ -1,10 +1,25 @@
 <template>
-  <div class="def__layout">
-    <nuxt />
+  <div>
+    <NavInfoBar class="infobar" />
+    <nuxt class="container" />
+    <Footer />
   </div>
 </template>
+<script>
+import NavInfoBar from '@/components/NavInfoBar'
+import Footer from '@/components/Footer'
 
+export default {
+  components: {
+    NavInfoBar,
+    Footer
+  }
+}
+</script>
 <style lang="scss">
+html {
+  -webkit-font-smoothing: subpixel-antialiased;
+}
 html,
 body,
 div {
@@ -15,12 +30,9 @@ textarea,
 body {
   font-size: 16px;
 }
-html,
 body {
-  overflow-x: hidden;
-}
-body {
-  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  overflow-y: scroll;
+  font-family: sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
 }
@@ -33,5 +45,11 @@ body {
 a {
   text-decoration: none;
   cursor: pointer;
+}
+h2 {
+  // display: inline-block;
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.5;
 }
 </style>

@@ -10,7 +10,7 @@
       <nav ref="nav" class="navigation">
         <ul>
           <li>
-            <nuxt-link :class="$route.path === '/' ? 'active-link' : ''" to="/">
+            <nuxt-link :class="mainLink" to="/">
               Main
             </nuxt-link>
           </li>
@@ -21,11 +21,15 @@
             :contents="['Pallet Sales and manufacture', 'Purchase and repair of pallets']"
           />
           <li>
-            <a href @click.prevent>Logistics</a>
+            <nuxt-link :class="logisticLink" to="/logistic">
+              Logistics
+            </nuxt-link>
           </li>
           <li is="drop-down" :name="'About us'" :contents="['About Rema Pro', 'Careers']" />
           <li>
-            <a href @click.prevent>Contacts</a>
+            <nuxt-link :class="contactsLink" to="/contacts">
+              Contacts
+            </nuxt-link>
           </li>
         </ul>
       </nav>
@@ -42,19 +46,19 @@
       <div class="choose-language">
         <ul>
           <li>
-            <a>EN</a>
+            <a href="">EN</a>
           </li>
           <li>
-            <a>RU</a>
+            <a href="">RU</a>
           </li>
           <li>
-            <a>UA</a>
+            <a href="">UA</a>
           </li>
           <li>
-            <a>DE</a>
+            <a href="">DE</a>
           </li>
           <li>
-            <a>IT</a>
+            <a href="">IT</a>
           </li>
         </ul>
       </div>
@@ -87,6 +91,21 @@ export default {
     }
   },
   computed: {
+    mainLink() {
+      return {
+        'active-link': this.$route.name === 'index'
+      }
+    },
+    logisticLink() {
+      return {
+        'active-link': this.$route.name === 'logistic'
+      }
+    },
+    contactsLink() {
+      return {
+        'active-link': this.$route.name === 'contacts'
+      }
+    },
     mobileMenuClass() {
       return {
         'mobile-menu__active': this.mobileMenuIndicator
@@ -94,8 +113,10 @@ export default {
     }
   },
   beforeMount() {
+    window.addEventListener('load', this.handleBigScreen)
     window.addEventListener('keydown', this.handleKeyDown)
     window.addEventListener('resize', this.handleResize)
+    this.$nuxt.$on('routeChanged', this.mobileMenuHandler)
 
     this.logo = document.getElementsByClassName('company-logo')[0]
 
@@ -114,6 +135,9 @@ export default {
   },
   methods: {
     mobileMenuHandler() {
+      if (window.matchMedia('(min-width: 980px)').matches) {
+        return
+      }
       this.mobileMenuIndicator = !this.mobileMenuIndicator
       if (this.mobileMenuIndicator) {
         document.documentElement.style.overflow = 'hidden'
@@ -122,7 +146,7 @@ export default {
       }
     },
     handleResize() {
-      if (window.matchMedia('(min-width: 930px)').matches) {
+      if (window.matchMedia('(min-width: 980px)').matches) {
         this.$refs.nav.style.display = 'block'
         document.documentElement.style.overflow = ''
         this.mobileMenuIndicator = false
@@ -135,6 +159,9 @@ export default {
       if (key === 'Escape' && this.mobileMenuIndicator) {
         this.mobileMenuHandler()
       }
+    },
+    handleBigScreen() {
+      this.$refs.navContainer.style.transform = 'translateX(-50%)'
     },
     handleScroll() {
       if (this.$refs.navContainer) {
@@ -187,6 +214,7 @@ export default {
     }
   }
 
+  // menu-button
   &::before,
   &::after,
   a {
@@ -259,13 +287,17 @@ export default {
   transition: transform 0.5s ease-in-out;
 
   z-index: 3000;
+
+  .active-link {
+    color: grey;
+  }
 }
 .infobar-container {
   height: 75px;
 
   position: relative;
 
-  margin: 0 350px;
+  margin: 0 325px;
 
   > *:not(.choose-language):not(.mobile-menu) {
     top: 50%;
@@ -287,9 +319,6 @@ export default {
     display: block;
     clear: both;
   }
-  /deep/ a {
-    color: black;
-  }
 }
 .navigation {
   margin-left: 40px;
@@ -297,16 +326,18 @@ export default {
   > ul {
     > li {
       float: left;
-    }
-    /deep/ a {
-      display: block;
-      padding: 9px 10px;
-      border-radius: 3px;
-      transition: all 0.3s ease-in-out 0s;
-
-      &:hover:not(.drop-down__item, .active-link) {
+      ::v-deep > a {
+        color: black;
+      }
+      > a:hover:not(.active-link) {
+        transition: all 0.3s ease-in-out 0s;
         color: orange;
       }
+    }
+    /deep/ li {
+      display: block;
+      padding: 9px 20px 9px 10px;
+      transition: all 150ms ease-in-out 0s;
 
       font-weight: 600;
       letter-spacing: 0.5px;
@@ -318,7 +349,7 @@ export default {
     margin: 0;
   }
 }
-@media screen and (max-width: 930px) {
+@media screen and (max-width: 980px) {
   .choose-language {
     display: none;
 
@@ -360,7 +391,7 @@ export default {
     margin: 0 300px;
   }
 }
-@media screen and (max-width: 1560px) {
+@media screen and (max-width: 1570px) {
   .infobar-container {
     margin: 0 250px;
   }
@@ -375,17 +406,17 @@ export default {
     margin: 0 150px;
   }
 }
-@media screen and (max-width: 1260px) {
+@media screen and (max-width: 1270px) {
   .infobar-container {
     margin: 0 100px;
   }
 }
-@media screen and (max-width: 1160px) {
+@media screen and (max-width: 1180px) {
   .infobar-container {
     margin: 0 50px;
   }
 }
-@media screen and (max-width: 1060px) {
+@media screen and (max-width: 1080px) {
   .infobar-container {
     margin: 0;
   }

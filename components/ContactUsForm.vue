@@ -1,5 +1,5 @@
 <template>
-  <div id="contact--container" @click.self="removeFocus()">
+  <div id="contact--container" @click="removeFocus($event)">
     <h2>Contact us</h2>
     <form
       name="contact"
@@ -17,13 +17,12 @@
           <label for="your-name">Your Name *</label>
           <input
             id="your-name"
+            v-model="inputs[0].val"
             type="text"
-            :value="name.val"
             name="your-name"
             size="40"
             aria-required="true"
             aria-invalid="false"
-            @input="ev => (name.val = ev.target.value)"
             @focus="foc($event)"
             @blur="unfoc($event)"
           />
@@ -32,13 +31,12 @@
           <label for="your-email">Your Email *</label>
           <input
             id="your-email"
+            v-model="inputs[1].val"
             type="email"
             name="your-email"
             size="40"
-            :value="email.val"
             aria-required="true"
             aria-invalid="false"
-            @input="ev => (email.val = ev.target.value)"
             @focus="foc($event)"
             @blur="unfoc($event)"
           />
@@ -47,13 +45,12 @@
           <label for="your-tel">Your phone number</label>
           <input
             id="your-tel"
+            v-model="inputs[2].val"
             type="tel"
             name="your-tel"
             size="40"
-            :value="tel.val"
             aria-required="true"
             aria-invalid="false"
-            @input="ev => (tel.val = ev.target.value)"
             @focus="foc($event)"
             @blur="unfoc($event)"
           />
@@ -63,13 +60,12 @@
         <label for="your-message">Message *</label>
         <textarea
           id="your-message"
+          v-model="inputs[3].val"
           name="your-message"
           cols="40"
           rows="10"
-          :value="message.val"
           aria-required="true"
           aria-invalid="false"
-          @input="ev => (message.val = ev.target.value)"
           @focus="foc($event)"
           @blur="unfoc($event)"
         ></textarea>
@@ -87,49 +83,79 @@
 
 <script>
 export default {
+  //  @input="ev => (message.val = ev.target.value)"        :value=""
   data() {
     return {
-      name: { val: '', valid: false },
-      email: { val: '', valid: false },
-      tel: { val: '', valid: false },
-      message: { val: '', valid: false }
+      inputs: [
+        { name: 'name', val: '', valid: false },
+        { name: 'email', val: '', valid: false },
+        { name: 'tel', val: '', valid: false },
+        { name: 'message', val: '', valid: false }
+      ],
+      lastActive: null
     }
   },
   methods: {
     foc(ev) {
+      this.lastActive = null
       ev.target.labels[0].classList.add('focused')
     },
     unfoc(ev) {
-      Object.keys(this.$data).forEach(name => {
-        if (this.$data[name].val !== '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
+      for (const input of this.inputs) {
+        if (input.val !== '' && input.name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           ev.target.labels[0].classList.add('good--label')
           ev.target.classList.add('good--input')
           ev.target.labels[0].classList.remove('bad--label')
           ev.target.classList.remove('bad--input')
-          this.$data[name].valid = true
-        } else if (this.$data[name].val === '' && name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
+          input.valid = true
+        } else if (input.val === '' && input.name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           ev.target.labels[0].classList.add('bad--label')
           ev.target.classList.add('bad--input')
           ev.target.labels[0].classList.remove('good--label')
           ev.target.classList.remove('good--input')
-          this.$data[name].valid = false
-        } else if (this.$data[name].val === '' && name !== ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
-          const voidInput = document.getElementsByName('your-' + name)[0]
+          input.valid = false
+        } else if (input.val === '' && input.name !== ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
+          const voidInput = document.getElementsByName('your-' + input.name)[0]
           voidInput.labels[0].classList.remove('good--label')
           voidInput.classList.remove('good--input')
           voidInput.labels[0].classList.remove('bad--label')
           voidInput.classList.remove('bad--input')
-          this.$data[name].valid = false
+          input.valid = false
         }
-      })
+      }
       ev.target.labels[0].classList.remove('focused')
     },
-    removeFocus() {
-      document.activeElement.blur()
+    removeFocus(ev) {
+      const tagName = ev.target.tagName
+      if (/input|textarea/i.test(tagName)) return
+      if (this.lastActive) {
+        this.inputs.forEach(input => {
+          if (input.val === '') {
+            const voidInput = document.getElementsByName('your-' + input.name)[0]
+            voidInput.labels[0].classList.remove('good--label')
+            voidInput.classList.remove('good--input')
+            voidInput.labels[0].classList.remove('bad--label')
+            voidInput.classList.remove('bad--input')
+            input.valid = false
+          }
+        })
+        this.lastActive.blur()
+        this.lastActive = null
+      } else {
+        this.lastActive = document.getElementsByClassName('bad--input')[0]
+      }
     },
     handleSubmit(ev) {
-      const check = Object.keys(this.$data).some(name => {
-        return !this.$data[name].valid
+      this.inputs.forEach(input => {
+        if (input.val !== '' && !input.valid) {
+          const voidInput = document.getElementsByName('your-' + input.name)[0]
+          voidInput.labels[0].classList.add('good--label')
+          voidInput.classList.add('good--input')
+          input.valid = true
+        }
+      })
+      const check = this.inputs.some(input => {
+        return !input.valid
       })
       if (check) {
         return false
@@ -141,10 +167,10 @@ export default {
       const url = document.getElementsByName('contact')[0].getAttribute('action')
       const encoded = this.encode({
         'form-name': 'contact',
-        'your-name': this.name.val,
-        'your-email': this.email.val,
-        'your-tel': this.tel.val,
-        'your-message': this.message.val
+        'your-name': this.inputs[0].val,
+        'your-email': this.inputs[1].val,
+        'your-tel': this.inputs[2].val,
+        'your-message': this.inputs[3].val
       })
 
       rq.onreadystatechange = function(vm) {
@@ -168,14 +194,16 @@ export default {
         .join('&')
     },
     clearInputs() {
-      Object.keys(this.$data).forEach(name => {
-        this.$data[name].val = null
-        const voidInput = document.getElementsByName('your-' + name)[0]
+      this.inputs.forEach(input => {
+        input.val = ''
+        const voidInput = document.getElementsByName('your-' + input.name)[0]
+        voidInput.blur()
+
         voidInput.labels[0].classList.remove('good--label')
         voidInput.classList.remove('good--input')
         voidInput.labels[0].classList.remove('bad--label')
         voidInput.classList.remove('bad--input')
-        this.$data[name].valid = false
+        input.valid = false
       })
     },
     rippleEffect(ev) {
@@ -222,18 +250,10 @@ export default {
 }
 h2 {
   margin: 70px 0 35px;
-
   font-size: 30px;
-  font-family: 'Open Sans';
   font-weight: 400;
-  color: #242526;
 }
 .contact {
-  // border-left: 230px solid transparent;
-  // border-right: 230px solid transparent;
-  // border-top: 50px solid transparent;
-  // padding: 0 20%;
-  // position: relative;
   display: flex;
   justify-content: space-evenly;
   cursor: pointer;
@@ -256,7 +276,7 @@ h2 {
     transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
     transform-origin: bottom left;
-    transform: translate(14px, 20px);
+    transform: translate(16px, 22px);
 
     color: rgba(0, 0, 0, 0.54);
   }
@@ -331,7 +351,7 @@ button[type='submit'] {
   // textarea placement
   position: absolute;
   bottom: 5px;
-  right: 25%;
+  right: 19%;
 
   user-select: none;
   // outline: none;
@@ -353,10 +373,71 @@ button[type='submit'] {
   -webkit-appearance: none;
   -webkit-tap-highlight-color: transparent;
 }
+@media screen and (max-width: 1200px) {
+  h2 {
+    padding-left: 10px;
+  }
+}
+@media screen and (max-width: 1150px) {
+  #submit-button {
+    right: 16%;
+  }
+  .contact {
+    padding: 0 5%;
+  }
+}
+@media screen and (max-width: 1075px) {
+  #submit-button {
+    right: 14%;
+  }
+  .contact {
+    padding: 0 5%;
+  }
+}
+@media screen and (max-width: 1015px) {
+  #submit-button {
+    right: 13%;
+  }
+  .contact {
+    padding: 0 5%;
+  }
+}
 @media screen and (max-width: 980px) {
   #submit-button {
-    bottom: -10px;
-    right: 35%;
+    right: 10%;
+  }
+  .contact {
+    padding: 0;
+  }
+}
+@media screen and (max-width: 875px) {
+  .contact {
+    flex-direction: column;
+    align-items: center;
+  }
+  #submit-button {
+    right: 32%;
+    bottom: -13px;
+  }
+}
+@media screen and (max-width: 775px) {
+  #submit-button {
+    right: 29%;
+  }
+}
+@media screen and (max-width: 650px) {
+  #submit-button {
+    right: 23%;
+  }
+}
+@media screen and (max-width: 525px) {
+  #submit-button {
+    right: 17%;
+  }
+}
+@media screen and (max-width: 420px) {
+  #submit-button {
+    right: 11%;
   }
 }
 @media screen and (max-width: 385px) {
@@ -366,9 +447,17 @@ button[type='submit'] {
       width: 290px;
       padding: 15px 14px;
     }
+    label {
+      transform: translate(16px, 19px);
+    }
+  }
+
+  #submit-button {
+    right: 16%;
   }
 }
-@media screen and (max-width: 320px) {
+
+@media screen and (max-width: 325px) {
   .contact {
     textarea,
     input {
@@ -378,6 +467,12 @@ button[type='submit'] {
     textarea {
       height: 180px;
     }
+    label {
+      transform: translate(16px, 17px);
+    }
+  }
+  #submit-button {
+    right: 75px;
   }
 }
 @media screen and (max-width: 260px) {
@@ -388,8 +483,8 @@ button[type='submit'] {
     }
   }
   #submit-button {
-    // bottom: -10px;
-    right: 20%;
+    padding: 4px 10px;
+    right: 65px;
   }
 }
 </style>

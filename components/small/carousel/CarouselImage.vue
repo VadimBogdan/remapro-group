@@ -190,24 +190,10 @@ export default {
     &--banner {
       position: relative;
       z-index: 1000;
-      font-family: 'Open Sans';
       max-width: 920px;
       margin: 0 auto;
-      color: #000;
       background-color: rgba(255, 255, 255, 0.75);
       text-align: center;
-
-      flex: 1 100%;
-      > h2 {
-        display: inline-block;
-        font-size: 34px;
-
-        font-weight: bold;
-        line-height: 1.5;
-        text-align: center;
-
-        margin: 0 0 0px;
-      }
       > p {
         font-size: 18px;
         line-height: 2;

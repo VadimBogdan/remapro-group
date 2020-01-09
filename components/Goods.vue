@@ -1,5 +1,5 @@
 <template>
-  <div class="goods_container flex-container">
+  <div class="goods">
     <Merchandise v-for="image in images" :key="image.id" :src="image.src" :title="image.title">
       <ul>
         <li v-for="content in image.contents" :key="content.id">
@@ -48,15 +48,6 @@ export default {
             { line: 'Class II (dark)', id: 108 }
           ],
           id: 2
-        },
-        {
-          src: 'goods-4',
-          title: 'Beech and hornbeam firewood',
-          contents: [
-            { line: 'Well seasoned firewood - ready for use', id: 109 },
-            { line: 'Cleaved logs for restaurants and pizzerias (no bark)', id: 110 }
-          ],
-          id: 3
         }
       ]
     }
@@ -65,21 +56,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.goods_container {
-  grid-area: goods;
-  align-self: end;
-  margin-top: 70px;
-}
-.flex-container {
+.goods {
   display: flex;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
+  grid-area: goods;
+  // align-self: end;
+  margin-top: 70px;
+
   flex-direction: row;
-  -webkit-flex-wrap: wrap;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -webkit-justify-content: space-around;
-  -ms-flex-pack: distribute;
-  justify-content: space-around;
+  justify-content: center;
 }
 </style>

@@ -146,7 +146,19 @@ export default {
       ]
     }
   },
-  created() {
+  updated() {
+    this.imageMaxWidth = this.changeMaxLeftScrolling()
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.changeMaxLeftScrolling)
+    window.removeEventListener('load', this.changeMaxLeftScrolling)
+    this.$nuxt.$off('routeChanged', this.changeMaxLeftScrolling)
+  },
+  mounted() {
+    window.addEventListener('resize', this.changeMaxLeftScrolling)
+    window.addEventListener('load', this.changeMaxLeftScrolling)
+    this.$nuxt.$on('routeChanged', this.changeMaxLeftScrolling)
+    setTimeout(this.changeMaxLeftScrolling, 1)
     this.photoCarouselActionsDebounced = this.throttlingSpecial(
       {
         forward: this.twistCarousel.bind(this, 'forward'),
@@ -156,12 +168,6 @@ export default {
       },
       725
     )
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.changeMaxLeftScrolling)
-  },
-  mounted() {
-    window.addEventListener('resize', this.changeMaxLeftScrolling)
 
     this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
 
@@ -169,6 +175,9 @@ export default {
   },
   methods: {
     changeMaxLeftScrolling() {
+      if (!document.getElementsByClassName('carouselItem')[0]) {
+        return
+      }
       this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
     }
   }

@@ -1,12 +1,20 @@
-// .navbar-auxiliary {
-//   padding-top: 0px !important;
-// }
-// @media screen and (max-width: 600px) {
-//   .container {
-//     grid-template-areas:
-//       '. goods .'
-//       'carousel carousel carousel'
-//       '. nav .'
-//       '. . .' !important;
-//   }
-// }
+.noscroll {
+  overflow-y: hidden;
+  padding-right: 17px;
+}
+.noshow {
+ display: none;
+}
+.confetti {
+  position: absolute;
+  opacity: 1;
+  transition: transform 500ms cubic-bezier(0.53, 0.05, 0.72, 0.16), opacity 850ms cubic-bezier(0.53, 0.05, 0.72, 0.16);
+  width: 8px;
+  height: 8px;
+}
+
+@media screen and (max-width: 1024px) {
+  .noscroll {
+    padding-right: 0px;
+  }
+}

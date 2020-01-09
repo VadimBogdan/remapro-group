@@ -2,8 +2,8 @@
   <li class="drop-down-wrap" @mouseenter="dropDownMouseEnter()" @mouseleave="dropDownMouseLeave()">
     <a href @click.prevent="dropDownClick()">{{ name }}</a>
     <ul class="drop-down">
-      <li v-for="content in contents" :key="content">
-        <a href class="drop-down__item" @click.prevent>{{ content }}</a>
+      <li v-for="content in contents" :key="content" class="drop-down__item">
+        <nuxt-link :to="linkify(content)">{{ content }}</nuxt-link>
       </li>
     </ul>
   </li>
@@ -27,6 +27,12 @@ export default {
     }
   },
   methods: {
+    linkify(str) {
+      return str
+        .split(/\s\/\s|\s/)
+        .join('-')
+        .toLowerCase()
+    },
     dropDownMouseEnter() {
       this.$el.lastChild.classList.add('drop-down__active')
       this.isFirstHit = true
@@ -66,8 +72,9 @@ export default {
 .drop-down {
   position: absolute;
   display: none;
-  a {
-    border-radius: 0 !important;
+
+  > li:last-child {
+    border-radius: 0px 0px 100px 0px;
   }
 
   &__active {
@@ -81,10 +88,11 @@ export default {
     }
   }
 }
-.active-link,
 .drop-down__item {
   background-color: #343148;
-  color: white !important;
+  a {
+    color: white;
+  }
 }
 @media screen and (max-width: 930px) {
   .drop-down {

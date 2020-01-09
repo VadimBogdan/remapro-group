@@ -1,47 +1,60 @@
 <template>
-  <div class="about-us">
+  <div id="about-us">
     <h2>About Us</h2>
     <p>
-      Wood Paletten Express Service, LLC (WPES) produces, sells and purchases wooden pallets and euro pallets. We
-      provide the best firewood for fireplaces as our seasoned firewood logs are ready to burn and do not require any
-      additional treatment. They are made from the hardwood timber and thus have the best wood heat value. Besides, our
-      firewood is an ecologically friendly material. It does not pollute the atmosphere during the process of burning.
+      <strong>REMA PRO is a manufacturer and exporter of timber since 2011.</strong>
     </p>
     <p>
-      We provide our clients with the wide range of pallet services, such as purchase pallets, pallet repair, and
-      shipping pallets to a customer’s location within the stipulated deadline. We ensure shipping pallets and firewood
-      delivery all over Ukraine and Europe 24/7/365, every day of the year.
+      <strong>Specializing in both on lumber from coniferous and deciduous as well as firewood.</strong>
     </p>
     <p>
-      Wood Paletten Express Service, LLC (WPES) is also ready to buy used wooden pallets, offering the best price to our
-      clients. We accept all pallets regardless of their condition and degree of damage. To add even more, we do not
-      hesitate to ship pallets from your location via our own transport. Using second hand pallets, you not only save
-      money but also minimize the impact on the environment. After all, by using 10 used pallets you save 1 tree from
-      cutting down.
+      Zhytomyr timber processing plant is part of a large industrial group of companies GK. "Manovar", the production of
+      which are located on the territory of the Russian Federation and Ukraine, customers are provided with product
+      worldwide. We provide comprehensive service to customers with their product quality and worldwide supply network.
     </p>
     <p>
       We have been working in the pallet industry since 1997, and we have not lose our passion to provide quality
       services and improve until today. WPES is an EPAL pallets manufacturer and has a license issued by the European
       Pallet Association.
     </p>
+    <h3>Our Mission</h3>
     <p>
-      Our company is located in ecological zone of Carpathian Mountains and so we can use only natural raw materials for
-      all of our products. Resource optimization is one of our priorities and that is why we ensure waste-free
-      production.
+      <span id="about-us__mission__quote"
+        >To control the maximum of work processes by integrating direct communication channels. We strive to meet and
+        exceed customers&#10076; expectations and industry standards.</span
+      >
+      It helps our customers to reduce cash costs and time.
     </p>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.about-us {
+#about-us {
   grid-area: aboutUs;
+  &__mission__quote {
+    &::before {
+      content: '\0275D';
+      margin-right: 2px;
+    }
+    &::after {
+      content: '\0275E';
+      margin-left: 2px;
+    }
+  }
+  strong {
+    font-weight: 400;
+  }
   h2 {
     margin: 70px 0 35px;
-
     font-size: 30px;
-    font-family: 'Open Sans';
     font-weight: 400;
-    color: #242526;
+  }
+  h3 {
+    padding-left: 25px;
+    padding-top: 10px;
+    font-size: 26px;
+    font-weight: 200;
+    margin: 0px 0px 30px;
   }
   p {
     color: #727272;
@@ -50,6 +63,19 @@
     letter-spacing: 0.2px;
     line-height: 27px;
     margin: 0 0 20px;
+  }
+}
+@media screen and (max-width: 1200px) {
+  p {
+    padding: 0px 70px;
+  }
+  h2 {
+    padding-left: 10px;
+  }
+}
+@media screen and (max-width: 550px) {
+  p {
+    padding: 0px 50px;
   }
 }
 </style>

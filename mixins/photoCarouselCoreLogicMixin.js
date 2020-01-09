@@ -7,6 +7,9 @@ export default {
         this.isMouseMoveActive = true
       } else if (this.swipeIndicators.length === 1) {
         this.swipeIndicators.push(distance)
+        if (!this.imageMaxWidth) {
+          this.changeMaxLeftScrolling()
+        }
         // backward > 0
         if (this.swipeIndicators[0] - this.swipeIndicators[1] > 0) {
           // determination of dependent photo

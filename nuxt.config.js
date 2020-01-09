@@ -30,6 +30,7 @@ export default {
   },
 
   ...routerBase,
+  subFolders: false,
   /*
    ** Customize the progress-bar color
    */
