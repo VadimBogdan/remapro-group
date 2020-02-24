@@ -2,7 +2,9 @@
   <div id="mobile-fallback">
     <div id="mobile-fallback__header">
       <div id="mobile-fallback__header--mobile">
-        <span> Sales: <a href="tel:+380000000000"> +(380) 00 000 00 00</a> </span><br />
+        <span>Sales:<a href="tel:+380000000000">+(380) 00 000 00 00</a></span>
+
+        <br />
         <span> Purchasing: <a href="tel:+380000000000">+(380) 00 000 00 00</a> </span>
       </div>
       <h1>
@@ -13,27 +15,21 @@
       </h2>
     </div>
     <div id="mobile-fallback__header--buttons">
-      <a href="" :class="linksAnim" @click.prevent @touchstart="isTouched = true" @touchend="isTouched = false"
-        >Details</a
-      >
-      <a href="" :class="linksAnim" @click.prevent @touchstart="isTouched = true" @touchend="isTouched = false"
-        >Contacts</a
-      >
+      <a class="gotoButton" href="" @click.prevent="scrollToAbout">About</a>
+      <a class="gotoButton" href="" @click.prevent="scrollToContact">Contact us</a>
     </div>
   </div>
 </template>
 <script>
 export default {
-  data() {
-    return {
-      isTouched: false
-    }
-  },
-  computed: {
-    linksAnim() {
-      return {
-        'climb-down': this.isTouched
-      }
+  methods: {
+    scrollToAbout() {
+      const top = document.getElementById('about-us').getBoundingClientRect().top + 150
+      window.scroll({ top, behavior: 'smooth' })
+    },
+    scrollToContact() {
+      const top = document.getElementById('contact').getBoundingClientRect().top - 80
+      window.scroll({ top, behavior: 'smooth' })
     }
   }
 }
@@ -42,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 #mobile-fallback {
   grid-area: carousel;
-  height: 350px;
+  height: 450px;
   width: 100%;
   background: url('~assets/background.jpg');
   background-position: -500px, -500px;
@@ -65,24 +61,6 @@ export default {
     }
     &--buttons {
       text-align: center;
-      a {
-        display: block;
-        margin: 10px auto;
-        font-size: 16px;
-        color: #fff;
-        text-transform: uppercase;
-        padding: 7px 15px;
-
-        border-radius: 5px;
-        width: 60%;
-
-        background-color: #000000;
-        box-shadow: 0 3px 0 0 #3f3b57;
-        &:active {
-          box-shadow: 0 0px 0 0 #3f3b57;
-          transform: translateY(3px);
-        }
-      }
     }
   }
   h1 {

@@ -1,18 +1,18 @@
 <template>
-  <div id="contact--container" @click="removeFocus($event)">
+  <div id="contact--container">
     <h2>Contact us</h2>
     <form
+      id="contact"
       name="contact"
       method="POST"
       netlify
       netlify-honeypot="bot-field"
-      class="contact"
       novalidate
       @submit.prevent="handleSubmit($event)"
     >
       <input type="hidden" name="bot-field" />
       <input type="hidden" name="form-name" value="contact" />
-      <div class="contact__inputs">
+      <div id="contact__inputs">
         <div class="contact__inputContainer">
           <label for="your-name">Your Name *</label>
           <input
@@ -83,7 +83,6 @@
 
 <script>
 export default {
-  //  @input="ev => (message.val = ev.target.value)"        :value=""
   data() {
     return {
       inputs: [
@@ -95,13 +94,17 @@ export default {
       lastActive: null
     }
   },
+  mounted() {
+    document.getElementById('footer').addEventListener('click', this.removeFocus)
+    document.getElementsByClassName('container')[0].addEventListener('click', this.removeFocus)
+  },
   methods: {
     foc(ev) {
       this.lastActive = null
       ev.target.labels[0].classList.add('focused')
     },
     unfoc(ev) {
-      for (const input of this.inputs) {
+      this.inputs.forEach(input => {
         if (input.val !== '' && input.name === ev.target.getAttribute('name').match(/-(\w+)/)[1]) {
           ev.target.labels[0].classList.add('good--label')
           ev.target.classList.add('good--input')
@@ -122,7 +125,8 @@ export default {
           voidInput.classList.remove('bad--input')
           input.valid = false
         }
-      }
+      })
+
       ev.target.labels[0].classList.remove('focused')
     },
     removeFocus(ev) {
@@ -164,7 +168,7 @@ export default {
     },
     xhr() {
       const rq = new XMLHttpRequest()
-      const url = document.getElementsByName('contact')[0].getAttribute('action')
+      const url = document.getElementById('contact').getAttribute('action')
       const encoded = this.encode({
         'form-name': 'contact',
         'your-name': this.inputs[0].val,
@@ -253,7 +257,7 @@ h2 {
   font-size: 30px;
   font-weight: 400;
 }
-.contact {
+#contact {
   display: flex;
   justify-content: space-evenly;
   cursor: pointer;
@@ -265,13 +269,14 @@ h2 {
   font-size: 1rem;
   line-height: 1;
 
-  &__inputContainer {
+  .contact__inputContainer {
     margin-bottom: 25px;
   }
 
   label {
     position: absolute;
     pointer-events: none;
+    user-select: none;
 
     transition: color 200ms cubic-bezier(0, 0, 0.2, 1) 0ms, transform 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
 
@@ -288,10 +293,13 @@ h2 {
     margin: 1px 1px;
 
     -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
     outline: none;
 
     border: rgba(0, 0, 0, 0.23) solid 1px;
     color: rgba(0, 0, 0, 0.87);
+
+    box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.23), 4px 0px 6px 0px rgba(0, 0, 0, 0.23);
 
     &:focus {
       border-width: 2px;
@@ -299,7 +307,7 @@ h2 {
       margin: 0;
     }
     &:hover:not(:focus) {
-      border-color: black;
+      border-color: rgba(0, 0, 0, 0.45);
     }
   }
 
@@ -382,7 +390,7 @@ button[type='submit'] {
   #submit-button {
     right: 16%;
   }
-  .contact {
+  #contact {
     padding: 0 5%;
   }
 }
@@ -390,7 +398,7 @@ button[type='submit'] {
   #submit-button {
     right: 14%;
   }
-  .contact {
+  #contact {
     padding: 0 5%;
   }
 }
@@ -398,7 +406,7 @@ button[type='submit'] {
   #submit-button {
     right: 13%;
   }
-  .contact {
+  #contact {
     padding: 0 5%;
   }
 }
@@ -406,12 +414,12 @@ button[type='submit'] {
   #submit-button {
     right: 10%;
   }
-  .contact {
+  #contact {
     padding: 0;
   }
 }
 @media screen and (max-width: 875px) {
-  .contact {
+  #contact {
     flex-direction: column;
     align-items: center;
   }
@@ -441,7 +449,7 @@ button[type='submit'] {
   }
 }
 @media screen and (max-width: 385px) {
-  .contact {
+  #contact {
     textarea,
     input {
       width: 290px;
@@ -458,7 +466,7 @@ button[type='submit'] {
 }
 
 @media screen and (max-width: 325px) {
-  .contact {
+  #contact {
     textarea,
     input {
       width: 210px;
@@ -476,7 +484,7 @@ button[type='submit'] {
   }
 }
 @media screen and (max-width: 260px) {
-  .contact {
+  #contact {
     textarea,
     input {
       width: 160px;

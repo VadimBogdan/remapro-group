@@ -25,9 +25,11 @@ body,
 div {
   margin: 0;
 }
+// html {
+//   overflow-x: hidden;
+// }
 input,
-textarea,
-body {
+textarea {
   font-size: 16px;
 }
 body {
@@ -47,7 +49,6 @@ a {
   cursor: pointer;
 }
 h2 {
-  // display: inline-block;
   margin: 0;
   font-size: 34px;
   line-height: 1.5;

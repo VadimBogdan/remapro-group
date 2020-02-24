@@ -126,7 +126,7 @@ main {
   }
 }
 p {
-  color: #727272;
+  color: #3b3b3b;
   font-size: 15px;
   font-weight: 400;
   letter-spacing: 0.2px;
@@ -135,7 +135,7 @@ p {
 }
 ul {
   li {
-    color: #727272;
+    color: #3b3b3b;
     padding: 6px 0;
   }
   margin: 0 0 20px;

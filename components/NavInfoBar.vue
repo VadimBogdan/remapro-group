@@ -78,6 +78,7 @@ export default {
     return {
       logo: null,
       mobileMenuIndicator: false,
+      hasScrollBar: false,
 
       mobileNavHeight: undefined,
 
@@ -146,6 +147,11 @@ export default {
       }
     },
     handleResize() {
+      if (window.innerWidth > document.documentElement.clientWidth) {
+        this.hasScrollBar = true
+      } else {
+        this.hasScrollBar = false
+      }
       if (window.matchMedia('(min-width: 980px)').matches) {
         this.$refs.nav.style.display = 'block'
         document.documentElement.style.overflow = ''
@@ -161,9 +167,15 @@ export default {
       }
     },
     handleBigScreen() {
+      if (window.innerWidth > document.documentElement.clientWidth) {
+        this.hasScrollBar = true
+      }
       this.$refs.navContainer.style.transform = 'translateX(-50%)'
     },
     handleScroll() {
+      if (this.mobileMenuIndicator && !this.hasScrollBar) {
+        return
+      }
       if (this.$refs.navContainer) {
         this.navBarLocationDeterminant.delta(window.scrollY - this.navBarLocationDeterminant.y)
         this.navBarLocationDeterminant.y = window.scrollY
@@ -396,12 +408,12 @@ export default {
     margin: 0 250px;
   }
 }
-@media screen and (max-width: 1460px) {
+@media screen and (max-width: 1470px) {
   .infobar-container {
     margin: 0 200px;
   }
 }
-@media screen and (max-width: 1360px) {
+@media screen and (max-width: 1370px) {
   .infobar-container {
     margin: 0 150px;
   }

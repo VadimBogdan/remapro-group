@@ -2,130 +2,67 @@
 export default {
   methods: {
     swipeEffects(distance) {
-      if (!this.swipeIndicators) {
-        this.swipeIndicators = [distance]
-        this.isMouseMoveActive = true
-      } else if (this.swipeIndicators.length === 1) {
-        this.swipeIndicators.push(distance)
-        if (!this.imageMaxWidth) {
-          this.changeMaxLeftScrolling()
-        }
-        // backward > 0
-        if (this.swipeIndicators[0] - this.swipeIndicators[1] > 0) {
-          // determination of dependent photo
-          this.currentlyDependentBackPhotoPos = this.currentPhotoPos - 1 === -1 ? this.photosQuantity - 1 : this.currentPhotoPos - 1
-          this.currentlyDependentFrontPhotoPos = this.currentPhotoPos + 1 === this.photosQuantity ? 0 : this.currentPhotoPos + 1
-          this.currentlyIndependentPhotoPos = this.currentPhotoPos
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.isTouchingBackward = true
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.isDependent = true
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.isTouchingForward = true
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.isDependent = true
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingBackward = true
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.isDependent = false
-        } else {
-          this.currentlyDependentBackPhotoPos = this.currentPhotoPos + 1 === this.photosQuantity ? 0 : this.currentPhotoPos + 1
-          this.currentlyDependentFrontPhotoPos = this.currentPhotoPos - 1 === -1 ? this.photosQuantity - 1 : this.currentPhotoPos - 1
-          this.currentlyIndependentPhotoPos = this.currentPhotoPos
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.isTouchingForward = true
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.isDependent = true
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.isTouchingBackward = true
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.isDependent = true
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingForward = true
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.isDependent = false
-        }
-      } else if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingBackward) {
-        // backward
-        this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeRightValue += this.swipeIndicators[1] - distance
-        this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeLeftValue += this.swipeIndicators[1] - distance
-        this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue += this.swipeIndicators[1] - distance
-        if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue >= this.imageMaxWidth) {
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeRightValue = this.imageMaxWidth
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeLeftValue = this.imageMaxWidth
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue = this.imageMaxWidth
-        } else if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue <= -this.imageMaxWidth) {
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeRightValue = -this.imageMaxWidth
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeLeftValue = -this.imageMaxWidth
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue = -this.imageMaxWidth
-        }
-        this.swipeIndicators[1] = distance
-      } else if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingForward) {
-        // forward
-        this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeLeftValue += this.swipeIndicators[1] - distance
-        this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeRightValue += this.swipeIndicators[1] - distance
-        this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue += this.swipeIndicators[1] - distance
-        if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue <= -this.imageMaxWidth) {
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeLeftValue = -this.imageMaxWidth
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeRightValue = -this.imageMaxWidth
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue = -this.imageMaxWidth
-        } else if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue >= this.imageMaxWidth) {
-          this.images[this.currentlyDependentBackPhotoPos].touchedHelper.touchStylesChangeLeftValue = this.imageMaxWidth
-          this.images[this.currentlyDependentFrontPhotoPos].touchedHelper.touchStylesChangeRightValue = this.imageMaxWidth
-          this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue = this.imageMaxWidth
-        }
-        this.swipeIndicators[1] = distance
-      }
-    },
-    swipeEffectsClear() {
-      if (this.currentlyIndependentPhotoPos === undefined || this.currentlyDependentFrontPhotoPos === undefined || this.currentlyDependentBackPhotoPos === undefined) {
-        return
-      }
-
-      // converting to percentages depending on imageMaxWidth
-      if ((this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeRightValue * 100) / this.imageMaxWidth >= 20) {
-        // backward
-        this.twistCarousel('backward-swipe')
-      } else if ((this.images[this.currentlyIndependentPhotoPos].touchedHelper.touchStylesChangeLeftValue * 100) / this.imageMaxWidth <= -20) {
-        // forward
-        this.twistCarousel('forward')
+      if (!this.start) {
+        this.path = distance
+        this.start = +/-?\d+/.exec(this.$refs.container.style.transform)[0]
       } else {
-        // if image didn't change
-        if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingBackward) {
-          this.images[this.currentlyDependentBackPhotoPos].untouchedHelper.isRecentlyUntouched = true
-          setTimeout(() => {
-            this.images[this.currentlyDependentBackPhotoPos].untouchedHelper.isRecentlyUntouched = false
-            this.images[this.currentlyDependentBackPhotoPos].untouchedHelper.isUntouched = true
-          }, 650)
-          setTimeout(() => {
-            this.images[this.currentlyDependentBackPhotoPos].untouchedHelper.isUntouched = false
-            this.currentlyDependentBackPhotoPos = undefined
-            this.currentlyDependentFrontPhotoPos = undefined
-          }, 700)
+        this.start -= this.path - distance
+        this.$refs.container.style.transform = `translateX(${this.start}px)`
+        this.path = distance
         }
-        if (this.images[this.currentlyIndependentPhotoPos].touchedHelper.isTouchingForward) {
-          this.images[this.currentlyDependentFrontPhotoPos].untouchedHelper.isRecentlyUntouched = true
-          setTimeout(() => {
-            this.images[this.currentlyDependentFrontPhotoPos].untouchedHelper.isRecentlyUntouched = false
-            this.images[this.currentlyDependentFrontPhotoPos].untouchedHelper.isUntouched = true
-          }, 650)
-          setTimeout(() => {
-            this.images[this.currentlyDependentFrontPhotoPos].untouchedHelper.isUntouched = false
-            this.currentlyDependentBackPhotoPos = undefined
-            this.currentlyDependentFrontPhotoPos = undefined
-          }, 700)
-        }
-      }
+      },
+    swipeEffectsClear() {
+      this.$refs.container.style.transition = 'transform 500ms ease-in-out'
+      let origin = -((this.activeIndex + 1) * this.imageWidth)
+      let correctionDistance = 0
 
-      Object.keys(this.images[this.currentlyIndependentPhotoPos].touchedHelper).forEach((key) => {
-        this.images[this.currentlyIndependentPhotoPos].touchedHelper[key] = false
-      })
-      Object.keys(this.images[this.currentlyDependentFrontPhotoPos].touchedHelper).forEach((key) => {
-        this.images[this.currentlyDependentFrontPhotoPos].touchedHelper[key] = false
-      })
-      Object.keys(this.images[this.currentlyDependentBackPhotoPos].touchedHelper).forEach((key) => {
-        this.images[this.currentlyDependentBackPhotoPos].touchedHelper[key] = false
-      })
+      const percentages = Math.abs((this.start - origin) * 100 / this.imageWidth)
+
+      if (this.start > origin) {
+        if (percentages >= 10) correctionDistance = this.twistCarousel('front')
+      } else {
+        if (percentages >= 10) correctionDistance = this.twistCarousel('back')
+      }
+        if (!this.twisted) {
+          let distance = -((this.activeIndex + 1) * this.imageWidth)
+          this.$refs.container.style.transform = `translateX(${distance}px)`
+        }
+
+        setTimeout(() => {
+          this.$refs.container.style.transition = ''
+          requestAnimationFrame(() => {
+            if (correctionDistance) {
+              this.$refs.container.style.transform = `translateX(${correctionDistance}px)`
+            }
+            this.$el.querySelector('.active').classList.remove('active')
+            this.imagesElements[this.activeIndex].classList.add('active')
+          })
+        }, 500)
+
+
 
       this.isSwipeReady = false
       setTimeout(() => {
         this.isSwipeReady = true
-      }, 725)
+      }, 500)
 
-      this.swipeIndicators = undefined
-      this.currentlyIndependentPhotoPos = undefined
+      this.start = 0
+      this.path = 0
+
+      this.twisted = false
     },
-    swipeCarouselPhoto(direction, id) {
-      this.photoCarouselActionsDebounced(direction, id)
+    correctPosition(pos) {
+      let distance = 0
+      if (pos === 'first') {
+        this.activeIndex = 0
+      } else if (pos === 'last') {
+        this.activeIndex = this.imagesElements.length - 1
+      }
+      return distance = -((this.activeIndex + 1) * this.imageWidth)
     },
+    // swipeCarouselPhoto(direction, id) {
+    //   this.photoCarouselActionsDebounced(direction, id)
+    // },
     throttlingSimple(f, ms) {
       var isCooldown = false
 
@@ -157,64 +94,62 @@ export default {
         setTimeout(() => (isCooldown = false), ms)
       }
     },
-    switchChangeImage(id) {
-      if (id === this.currentPhotoPos) {
-        return
+    switchChangeImage(newActiveIndex) {
+      let length = this.imagesElements.length - 1
+      let correctionDistance = 0
+      this.$refs.container.style.transition = 'transform 500ms ease-in-out'
+      if (this.activeIndex === 0 && newActiveIndex === length) {
+        correctionDistance = this.twistCarousel('front')
+      } else if (this.activeIndex === length && newActiveIndex === 0) {
+        correctionDistance = this.twistCarousel('back')
+      } else if (this.activeIndex > newActiveIndex) {
+        this.twistCarousel('front')
+      } else {
+        this.twistCarousel('back')
       }
-      var previousPhotoPos = this.currentPhotoPos
-      this.currentPhotoPos = id
-      this.images[previousPhotoPos].switchHelper.isHidingAnim = true
       setTimeout(() => {
-        this.images[previousPhotoPos].isActive = false
-        this.images[previousPhotoPos].switchHelper.isHiding = true
-        this.images[previousPhotoPos].switchHelper.isHidingAnim = false
-        this.images[id].switchHelper.isShowingAnim = true
-        this.images[id].switchHelper.isShowing = true
-      }, 321)
-      setTimeout(() => {
-        this.images[id].switchHelper.isShowing = false
-        this.images[id].switchHelper.isShowingAnim = false
-        this.images[previousPhotoPos].switchHelper.isHiding = false
-        this.images[id].isActive = true
-      }, 650)
+        this.$refs.container.style.transition = ''
+        requestAnimationFrame(() => {
+          if (correctionDistance) {
+            this.$refs.container.style.transform = `translateX(${correctionDistance}px)`
+          }
+          this.$el.querySelector('.active').classList.remove('active')
+          this.imagesElements[this.activeIndex].classList.add('active')
+        })
+      }, 500)
     },
     twistCarousel(direction) {
-      var previousPhotoPos = this.currentPhotoPos
-      if (direction === 'forward') {
-        this.currentPhotoPos++
-        if (this.photosQuantity === this.currentPhotoPos) {
-          this.currentPhotoPos = 0
+        this.twisted = true
+        let distance = 0
+        let correctionDistance = 0
+        if (direction === 'front') {
+          if (this.imagesElements[this.activeIndex].previousElementSibling.classList.contains('clone')) {
+            this.outbound = true
+            distance = -((this.activeIndex) * this.imageWidth)
+          } else {
+            this.activeIndex--
+            distance = -((this.activeIndex + 1) * this.imageWidth)
+          }
+        } else if (direction === 'back') {
+          if (this.imagesElements[this.activeIndex].nextElementSibling.classList.contains('clone')) {
+            distance = -((this.activeIndex + 2) * this.imageWidth)
+            this.outbound = true
+          } else {
+            this.activeIndex++
+            distance = -((this.activeIndex + 1) * this.imageWidth)
+          }
         }
-        this.images[previousPhotoPos].isActive = false
-        this.images[previousPhotoPos].isForwarding = true
-        this.images[this.currentPhotoPos].isActive = true
-        setTimeout(() => {
-          this.images[previousPhotoPos].switchHelper.isHiding = true
-          this.images[previousPhotoPos].isForwarding = false
-        }, 650)
-        setTimeout(() => {
-          this.images[previousPhotoPos].switchHelper.isHiding = false
-        }, 665)
-      } else if (direction === 'backward-swipe') {
-        this.currentPhotoPos--
-        if (this.currentPhotoPos === -1) {
-          this.currentPhotoPos = this.photosQuantity - 1
+        if (this.outbound) {
+          if (this.activeIndex === this.imagesElements.length - 1) {
+            correctionDistance = this.correctPosition('first')
+          } else {
+            correctionDistance = this.correctPosition('last')
+          }
         }
-        this.images[previousPhotoPos].isActive = false
-        this.images[this.currentPhotoPos].isActive = true
-      } else {
-        this.currentPhotoPos--
-        if (this.currentPhotoPos === -1) {
-          this.currentPhotoPos = this.photosQuantity - 1
-        }
-        this.images[previousPhotoPos].isActive = false
-        this.images[this.currentPhotoPos].isMovingBackward = true
-        this.images[this.currentPhotoPos].isActive = true
-
-        setTimeout(() => {
-          this.images[this.currentPhotoPos].isMovingBackward = false
-        }, 650)
+        this.outbound = false
+        this.$refs.container.style.transform = `translateX(${distance}px)`
+        return correctionDistance
       }
     }
   }
-}
+

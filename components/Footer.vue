@@ -65,19 +65,20 @@
   position: relative;
   #facebook-icon {
     &:hover {
-      fill: #3b5998;
+      fill: #4a4848; // #3b5998;
     }
   }
   #instagram-icon {
-    border-radius: 50%;
+    // border-radius: 50%;
 
     &:hover {
-      background-image: radial-gradient(circle at 33% 100%, #fed373 4%, #f15245 30%, #d92e7f 62%, #9b36b7 85%, #515ecf);
+      fill: #4a4848;
+      // background-image: radial-gradient(circle at 33% 100%, #fed373 4%, #f15245 30%, #d92e7f 62%, #9b36b7 85%, #515ecf);
     }
   }
   #telegram-icon {
     &:hover {
-      fill: #35a9ec;
+      fill: #4a4848; // fill: #35a9ec;
     }
   }
   #creator {

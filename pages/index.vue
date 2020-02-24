@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PhotoCarousel v-show="!mobileFallbackIndicator" class="carousel" />
+    <PhotoCarousel v-show="!mobileFallbackIndicator" />
     <MobileFallBack v-show="mobileFallbackIndicator" />
     <Goods />
     <AboutUs />
@@ -71,7 +71,7 @@ export default {
   grid:
     'nav nav nav' 75px
     'carousel carousel carousel' auto
-    '. goods .' auto
+    'goods goods goods' auto
     '. aboutUs .' auto
     '. form .' auto
     'footer footer footer' auto

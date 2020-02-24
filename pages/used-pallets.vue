@@ -68,10 +68,24 @@ export default {
   data() {
     return {
       overlaySpan: null,
-      confetties: []
+      confetties: [],
+      hasScrollBar: false
     }
   },
+  mounted() {
+    if (window.innerWidth > document.documentElement.clientWidth) {
+      this.hasScrollBar = true
+    }
+    addEventListener('resize', this.handleResize)
+  },
   methods: {
+    handleResize() {
+      if (window.innerWidth > document.documentElement.clientWidth) {
+        this.hasScrollBar = true
+      } else {
+        this.hasScrollBar = false
+      }
+    },
     confettiIsomorph(span, posW, posH, offsetDiff, offsetH) {
       const step = 3
       const colors = ['#A569BD', '#F4D03F', '#2ECC71']
@@ -141,7 +155,10 @@ export default {
 
             this.overlaySpan = null
 
-            document.body.classList.toggle('noscroll')
+            if (this.hasScrollBar) {
+              document.body.classList.remove('noscroll--y')
+            }
+
             document.getElementsByClassName('infobar')[0].classList.toggle('noshow')
             elem.classList.toggle('attachment__image-overlay--active')
           }, 300)
@@ -160,7 +177,9 @@ export default {
       this.overlaySpan.append(img.cloneNode())
 
       this.overlaySpan.style.top = `${offsetOne}px`
-      document.body.classList.toggle('noscroll')
+      if (this.hasScrollBar) {
+        document.body.classList.add('noscroll--y')
+      }
       document.getElementsByClassName('infobar')[0].classList.toggle('noshow')
 
       this.overlaySpan.style.transform = `translateY(${offsetTwo - offsetOne}px)`

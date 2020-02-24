@@ -1,33 +1,57 @@
 <template>
-  <div class="carousel_container">
+  <div class="carousel">
     <Arrow class="arrow_backward" @click.native="photoCarouselActionsDebounced('backward')" />
     <Arrow class="arrow_forward" @click.native="photoCarouselActionsDebounced('forward')" />
-    <div>
+    <div
+      ref="container"
+      class="carousel-images"
+      @touchstart="touch($event)"
+      @touchmove="touch($event)"
+      @touchend="touchEnd($event)"
+      @touchcancel="touchEnd($event)"
+      @mousedown="mouseDown($event)"
+      @mouseup="mouseUp($event)"
+      @mousemove="mouseMove($event)"
+      @mouseout="mouseOut($event)"
+    >
       <CarouselImage
-        v-for="image in images"
-        :key="image.id"
-        v-bind="image"
+        class="clone"
+        v-bind="images[2]"
+        :image-id="2"
+        :is-mouse-down="isMouseDown"
         @swipe-carousel-photo="swipeCarouselPhoto($event.direction, $event.id)"
-        @touchmove.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
-        @touchstart.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
-        @touchend.passive="photoCarouselActionsDebounced('swipeClear')"
-        @mousemove.passive="isSwipeReady ? swipeEffects($event.clientX) : 0"
+      >
+        <template v-slot:header>{{ images[2].header }}</template>
+        <template v-slot:paragraph>{{ images[2].paragraph }}</template>
+      </CarouselImage>
+      <CarouselImage
+        v-for="(image, index) in images"
+        :key="index"
+        v-bind="image"
+        :image-id="index"
+        :is-mouse-down="isMouseDown"
+        @swipe-carousel-photo="swipeCarouselPhoto($event.direction, $event.id)"
       >
         <template v-slot:header>{{ image.header }}</template>
         <template v-slot:paragraph>{{ image.paragraph }}</template>
       </CarouselImage>
-      <ul class="switchers-container">
-        <li
-          is="CarouselImageSwitcher"
-          v-for="image in images"
-          :id="image.id"
-          :key="image.id"
-          :current-photo-pos="currentPhotoPos"
-          class="switcher"
-          @change-image-pos="photoCarouselActionsDebounced('switch', $event)"
-        />
-      </ul>
+      <CarouselImage
+        class="clone"
+        v-bind="images[0]"
+        :image-id="0"
+        :is-mouse-down="isMouseDown"
+        @swipe-carousel-photo="swipeCarouselPhoto($event.direction, $event.id)"
+      >
+        <template v-slot:header>{{ images[0].header }}</template>
+        <template v-slot:paragraph>{{ images[0].paragraph }}</template>
+      </CarouselImage>
     </div>
+    <ImageSwitcher
+      :images="images"
+      :length="imagesElements.length - 1"
+      :active-index="activeIndex"
+      @change-image-pos="photoCarouselActionsDebounced('switch', $event)"
+    />
   </div>
 </template>
 
@@ -36,34 +60,42 @@ import photoCarouselCoreLogicMixin from '@/mixins/photoCarouselCoreLogicMixin.js
 
 import Arrow from '@/components/small/carousel/Arrow.vue'
 import CarouselImage from '@/components/small/carousel/CarouselImage.vue'
-import CarouselImageSwitcher from '@/components/small/carousel/CarouselImageSwitcher.vue'
+import ImageSwitcher from '@/components/small/carousel/ImageSwitcher.vue'
 
 export default {
   components: {
     Arrow,
     CarouselImage,
-    CarouselImageSwitcher
+    ImageSwitcher
   },
   mixins: [photoCarouselCoreLogicMixin],
   data() {
     return {
-      currentPhotoPos: 0,
+      imagesElements: [],
+      path: 0,
+      twisted: false,
+      isMouseDown: false,
+      activeIndex: 0,
+      imageWidth: 1663,
+      outbound: false,
+      // backFrom: 0,
+      // backTo: 3,
+      // frontFrom: 4,
+      // frontTo: 1,
+
+      currentImageIndex: 0,
       twistCarouselDebounced: null,
       photoCarouselActionsDebounced: null,
       swipeIndicators: null,
       isSwipeReady: true,
-      imageMaxWidth: 0,
       currentlyDependentFrontPhotoPos: undefined,
       currentlyDependentBackPhotoPos: undefined,
       currentlyIndependentPhotoPos: undefined,
-      photosQuantity: 0,
       images: [
         {
-          src: 'carousel-1',
           paragraph: 'Certified EPAL, UIC and CP pallets of top quality',
           header: 'Production, sales, purchase, repair, and delivery of pallets',
-          id: 0,
-          isActive: true,
+          link: '/pallets-epal-uic',
           isForwarding: false,
           isMovingBackward: false,
           touchedHelper: {
@@ -86,13 +118,11 @@ export default {
           }
         },
         {
-          src: 'carousel-2',
           paragraph:
             'Deliveries via our own transport. Guaranteed delivery of any volume of goods' +
             'all over Ukraine and Europe every day of the year: 365 / 7 / 24 service',
           header: 'Logistics',
-          id: 1,
-          isActive: false,
+          link: '/logistic',
           isForwarding: false,
           isMovingBackward: false,
           touchedHelper: {
@@ -115,13 +145,11 @@ export default {
           }
         },
         {
-          src: 'carousel-3',
           paragraph:
             'All types of pallets. Wholesale and individual orders.' +
             'We purchase pallets all over Ukraine and deliver it via our own transport',
           header: 'Purchase, repair and sales of used pallets',
-          id: 2,
-          isActive: false,
+          link: '/used-pallets',
           isForwarding: false,
           isMovingBackward: false,
           touchedHelper: {
@@ -147,55 +175,105 @@ export default {
     }
   },
   updated() {
-    this.imageMaxWidth = this.changeMaxLeftScrolling()
+    this.getMaxLeftScrolling()
+    this.imagesElements[this.activeIndex].classList.add('active')
+    // this.frontFrom = this.imagesElements.length - 1
   },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.changeMaxLeftScrolling)
-    window.removeEventListener('load', this.changeMaxLeftScrolling)
-    this.$nuxt.$off('routeChanged', this.changeMaxLeftScrolling)
-  },
+  // beforeDestroy() {
+  //   window.removeEventListener('resize', this.getMaxLeftScrolling)
+  //   window.removeEventListener('load', this.getMaxLeftScrolling)
+  //   this.$nuxt.$off('routeChanged', this.getMaxLeftScrolling)
+  // },
   mounted() {
-    window.addEventListener('resize', this.changeMaxLeftScrolling)
-    window.addEventListener('load', this.changeMaxLeftScrolling)
-    this.$nuxt.$on('routeChanged', this.changeMaxLeftScrolling)
-    setTimeout(this.changeMaxLeftScrolling, 1)
+    window.addEventListener('resize', this.getMaxLeftScrolling)
+    window.addEventListener('load', this.getMaxLeftScrolling)
+    this.$nuxt.$on('routeChanged', this.getMaxLeftScrolling)
+    setTimeout(this.getMaxLeftScrolling, 1)
+
+    this.getMaxLeftScrolling()
+    this.imagesElements = Array.from(this.$el.querySelectorAll('.carouselItem:not(.clone)'))
+    this.imagesElements[this.activeIndex].classList.add('active')
+    this.imagesElements.forEach(el => (el.style.width = `${this.imageWidth}px`))
+    this.frontFrom = this.imagesElements.length - 1
+
+    this.toActive()
+
     this.photoCarouselActionsDebounced = this.throttlingSpecial(
       {
-        forward: this.twistCarousel.bind(this, 'forward'),
-        backward: this.twistCarousel.bind(this, 'backward'),
+        // forward: this.twistCarousel.bind(this, 'forward'),
+        // backward: this.twistCarousel.bind(this, 'backward'),
         switch: this.switchChangeImage,
         swipeClear: this.swipeEffectsClear
       },
-      725
+      500
     )
-
-    this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
-
-    this.photosQuantity = document.getElementsByClassName('carouselItem').length
   },
   methods: {
-    changeMaxLeftScrolling() {
-      if (!document.getElementsByClassName('carouselItem')[0]) {
+    toActive() {
+      const translate = -((this.activeIndex + 1) * this.imageWidth)
+      this.$refs.container.style.transform = `translateX(${translate}px)`
+    },
+    touch(e) {
+      if (this.isSwipeReady) {
+        this.swipeEffects(e.changedTouches[0].clientX)
+      }
+    },
+    touchEnd(e) {
+      this.photoCarouselActionsDebounced('swipeClear')
+    },
+    mouseOut(e) {
+      if (!this.isMouseDown) {
         return
       }
-      this.imageMaxWidth = document.getElementsByClassName('carouselItem')[0].clientWidth
+      this.isMouseDown = false
+      this.photoCarouselActionsDebounced('swipeClear')
+    },
+    mouseMove(e) {
+      if (!this.isMouseDown) {
+        return
+      }
+      this.swipeEffects(e.clientX)
+    },
+    mouseUp(e) {
+      if (this.isSwipeReady) {
+        this.swipeEffects(e.clientX)
+      }
+      this.isMouseDown = false
+      this.photoCarouselActionsDebounced('swipeClear')
+    },
+    mouseDown(e) {
+      if (this.isSwipeReady) {
+        this.swipeEffects(e.clientX)
+      }
+      this.isMouseDown = true
+    },
+    getMaxLeftScrolling() {
+      if (!document.querySelector('.carousel').clientWidth) {
+        this.imageWidth = 1663
+        return
+      }
+      this.imageWidth = document.querySelector('.carousel').clientWidth
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.carousel_container {
+.carousel {
   grid-area: carousel;
   cursor: pointer;
-  height: 350px;
+  height: 450px;
   width: 100%;
-  max-width: 1680px;
+  max-width: 1663px;
   align-self: end;
   position: relative;
   overflow: hidden;
   background: black;
-  z-index: 1;
+  // z-index: 1;
+  &-images {
+    display: inline-flex;
+    transform-origin: center;
+  }
 
   margin: 0 auto;
   .arrow_backward {
@@ -207,25 +285,6 @@ export default {
     z-index: 1000;
     top: calc(50% - #{$Half_of_arrow_width});
     right: 0;
-  }
-}
-.switchers-container {
-  position: absolute;
-  list-style: none;
-
-  left: 50%;
-  top: 85%;
-  transform: translateX(-50%);
-  z-index: 9999;
-
-  padding: 0;
-  margin: 0;
-
-  li {
-    float: left;
-  }
-  .switcher {
-    z-index: 500;
   }
 }
 </style>

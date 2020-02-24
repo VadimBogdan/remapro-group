@@ -32,6 +32,10 @@
 #about-us {
   grid-area: aboutUs;
   &__mission__quote {
+    &::before,
+    &::after {
+      opacity: 0.7;
+    }
     &::before {
       content: '\0275D';
       margin-right: 2px;
@@ -57,8 +61,8 @@
     margin: 0px 0px 30px;
   }
   p {
-    color: #727272;
-    font-size: 15px;
+    color: #3b3b3b;
+    font-size: 16px;
     font-weight: 400;
     letter-spacing: 0.2px;
     line-height: 27px;

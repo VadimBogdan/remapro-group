@@ -1,20 +1,6 @@
 <template>
-  <div
-    class="carouselItem"
-    :class="[movingClasses, hiddingShowingCarouselImageClass, touchedClass, untouchedClass]"
-    :style="[touchedDependentStyles, touchedIndependentStyles]"
-    draggable="false"
-    ondragstart="return false;"
-    @touchstart.passive="$emit('touchstart', { clientX: $event.changedTouches[0].clientX })"
-    @touchend.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
-    @touchcancel.passive="$emit('touchend', { clientX: $event.changedTouches[0].clientX })"
-    @touchmove.passive="$emit('touchmove', { clientX: $event.changedTouches[0].clientX })"
-    @mousedown.passive="$emit('touchstart', { clientX: $event.x }) && (isMouseDown = true)"
-    @mousemove.passive="isMouseDown ? $emit('touchmove', { clientX: $event.x }) : 0"
-    @mouseup.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
-    @mouseout.passive="$emit('touchend', { clientX: $event.x }) && (isMouseDown = false)"
-  >
-    <img :src="require('~/assets/carousel/' + src + '.jpg')" class="carouselItem__image" />
+  <div class="carouselItem">
+    <img draggable="false" :src="require('~/assets/carousel/' + imageId + '.jpg')" class="carouselItem__image" />
     <div class="carouselItem__innerElements--banner">
       <h2>
         <slot name="header"
@@ -25,8 +11,12 @@
       <p><slot name="paragraph">Production, sales, purchase, repair, and delivery of pallets</slot></p>
     </div>
     <ul class="carouselItem__innerElements--buttonsContainer">
-      <li><a href="" class="carouselItem__innerElements--details" @click.prevent>Details</a></li>
-      <li><a href=".contact" class="carouselItem__innerElements--contacts" @click.prevent>Contacts</a></li>
+      <li>
+        <a class="gotoButton" :href="link">Detailed</a>
+      </li>
+      <li>
+        <a class="gotoButton" href @click.prevent="scrollToContact">Contacts us</a>
+      </li>
     </ul>
   </div>
 </template>
@@ -34,13 +24,6 @@
 <script>
 export default {
   props: {
-    src: {
-      type: String,
-      required: true
-    },
-    isActive: {
-      type: Boolean
-    },
     isForwarding: {
       type: Boolean
     },
@@ -59,14 +42,16 @@ export default {
       type: Object,
       required: true
     },
-    id: {
+    imageId: {
       type: Number,
       required: true
-    }
-  },
-  data() {
-    return {
-      isMouseDown: false
+    },
+    link: {
+      type: String,
+      required: true
+    },
+    isMouseDown: {
+      type: Boolean
     }
   },
   computed: {
@@ -102,13 +87,13 @@ export default {
         return undefined
       }
     },
-    movingClasses() {
-      return {
-        active_image: this.isActive,
-        forward: this.isForwarding && !this.isActive,
-        backward: this.isMovingBackward
-      }
-    },
+    // movingClasses() {
+    //   return {
+    //     active: this.isActive
+    //     // forward: this.isForwarding && !this.isActive,
+    //     // backward: this.isMovingBackward
+    //   }
+    // },
     hiddingShowingCarouselImageClass() {
       return {
         hide_anim: this.switchHelper.isHidingAnim,
@@ -129,19 +114,27 @@ export default {
         untouched_backward_dependent: this.untouchedHelper.isUntouched
       }
     }
+  },
+  methods: {
+    scrollToContact() {
+      // if (this.isMouseDown) return
+
+      const top = document.getElementById('contact').getBoundingClientRect().top - 80
+      window.scroll({ top, behavior: 'smooth' })
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .carouselItem {
-  position: absolute;
-  transition: all 650ms ease-in-out;
+  position: relative;
+  // transition: all 650ms ease-in-out;
   user-select: none;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  left: -100%;
+  // z-index: -1;
+  width: 1663px;
+  height: 450px;
+  // transform: translate(-100%);
   &__innerElements {
     &--buttonsContainer {
       > li {
@@ -162,29 +155,6 @@ export default {
         display: block;
         height: 0;
         clear: both;
-      }
-    }
-    &--details,
-    &--contacts {
-      border-radius: 3px;
-      color: white;
-      font-family: 'Open sans';
-      font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 0.5px;
-
-      display: inline-block;
-
-      padding: 10px 25px;
-
-      text-transform: uppercase;
-
-      background-color: #000000;
-      box-shadow: 0 3px 0 0 #3f3b57;
-
-      &:active {
-        box-shadow: 0 0px 0 0 #3f3b57;
-        transform: translateY(3px);
       }
     }
     &--banner {
@@ -240,9 +210,9 @@ export default {
   transition: none !important;
   left: -100% !important;
 }
-.active_image {
-  z-index: 10 !important;
-  left: 0 !important;
+.active {
+  z-index: 1000; // !important;
+  // transform: translate(0);
 }
 .backward {
   animation: backward_move 650ms ease-in-out 0ms 1 normal;
