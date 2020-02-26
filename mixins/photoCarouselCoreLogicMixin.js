@@ -1,43 +1,55 @@
 /* eslint-disable */
 export default {
   methods: {
-    swipeEffects(distance) {
-      if (!this.start) {
-        this.path = distance
-        this.start = +/-?\d+/.exec(this.$refs.container.style.transform)[0]
+    swipeEffects(x2) {
+      if (!this.x1) {
+        this.x1 = x2 // 1000
       } else {
-        this.start -= this.path - distance
-        this.$refs.container.style.transform = `translateX(${this.start}px)`
-        this.path = distance
-        }
-      },
+        this.shift += x2 - this.x1
+
+        this.$refs.container.style.transform = `translateX(${this.shift}px)`
+
+        this.x1 = x2
+      }
+    },
     swipeEffectsClear() {
       this.$refs.container.style.transition = 'transform 500ms ease-in-out'
+      // current item position (without added translation)
       let origin = -((this.activeIndex + 1) * this.imageWidth)
-      let correctionDistance = 0
+      let twistData = {}
 
-      const percentages = Math.abs((this.start - origin) * 100 / this.imageWidth)
+      const percentages = Math.abs((this.shift - origin) * 100 / this.imageWidth)
 
-      if (this.start > origin) {
-        if (percentages >= 10) correctionDistance = this.twistCarousel('front')
-      } else {
-        if (percentages >= 10) correctionDistance = this.twistCarousel('back')
+
+      if (percentages >= 10) {
+        if (this.shift > origin) {
+          twistData = this.twistCarousel('front')
+       } else {
+          twistData = this.twistCarousel('back')
+       }
       }
-        if (!this.twisted) {
-          let distance = -((this.activeIndex + 1) * this.imageWidth)
-          this.$refs.container.style.transform = `translateX(${distance}px)`
-        }
+      
+  
+      if (!this.twisted)
+        this.$refs.container.style.transform = `translateX(${origin}px)`
 
+      setTimeout(() => {
+        this.$refs.container.style.transition = ''
         setTimeout(() => {
-          this.$refs.container.style.transition = ''
           requestAnimationFrame(() => {
-            if (correctionDistance) {
-              this.$refs.container.style.transform = `translateX(${correctionDistance}px)`
+            if (twistData.newOrigin) {
+              this.shift = twistData.newOrigin
+              this.$refs.container.style.transform = `translateX(${this.shift}px)`
+            } else if (twistData.shift) {
+              this.shift = twistData.shift
+            } else {
+              this.shift = origin
             }
             this.$el.querySelector('.active').classList.remove('active')
             this.imagesElements[this.activeIndex].classList.add('active')
           })
-        }, 500)
+        })
+      }, 500)
 
 
 
@@ -46,19 +58,18 @@ export default {
         this.isSwipeReady = true
       }, 500)
 
-      this.start = 0
-      this.path = 0
+      this.x1 = 0
 
       this.twisted = false
     },
     correctPosition(pos) {
-      let distance = 0
       if (pos === 'first') {
         this.activeIndex = 0
       } else if (pos === 'last') {
         this.activeIndex = this.imagesElements.length - 1
       }
-      return distance = -((this.activeIndex + 1) * this.imageWidth)
+      console.log(-((this.activeIndex + 1) * this.imageWidth))
+      return -((this.activeIndex + 1) * this.imageWidth)
     },
     // swipeCarouselPhoto(direction, id) {
     //   this.photoCarouselActionsDebounced(direction, id)
@@ -120,35 +131,47 @@ export default {
     },
     twistCarousel(direction) {
         this.twisted = true
-        let distance = 0
-        let correctionDistance = 0
+
+        let shift = 0
+        let newOrigin = 0
+
         if (direction === 'front') {
+
           if (this.imagesElements[this.activeIndex].previousElementSibling.classList.contains('clone')) {
             this.outbound = true
-            distance = -((this.activeIndex) * this.imageWidth)
+
+            shift = -((this.activeIndex) * this.imageWidth)
           } else {
             this.activeIndex--
-            distance = -((this.activeIndex + 1) * this.imageWidth)
+
+            shift = -((this.activeIndex + 1) * this.imageWidth)
           }
+
         } else if (direction === 'back') {
+
           if (this.imagesElements[this.activeIndex].nextElementSibling.classList.contains('clone')) {
-            distance = -((this.activeIndex + 2) * this.imageWidth)
             this.outbound = true
+
+            shift = -((this.activeIndex + 2) * this.imageWidth)
           } else {
             this.activeIndex++
-            distance = -((this.activeIndex + 1) * this.imageWidth)
+
+            shift = -((this.activeIndex + 1) * this.imageWidth)
           }
+
         }
+
         if (this.outbound) {
           if (this.activeIndex === this.imagesElements.length - 1) {
-            correctionDistance = this.correctPosition('first')
+            newOrigin = this.correctPosition('first')
           } else {
-            correctionDistance = this.correctPosition('last')
+            newOrigin = this.correctPosition('last')
           }
         }
+
         this.outbound = false
-        this.$refs.container.style.transform = `translateX(${distance}px)`
-        return correctionDistance
+        this.$refs.container.style.transform = `translateX(${shift}px)`
+        return { newOrigin, shift }
       }
     }
   }

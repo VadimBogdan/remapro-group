@@ -74,7 +74,10 @@ export default {
   display: none;
 
   > li:last-child {
-    border-radius: 0px 0px 100px 0px;
+    border-radius: 0px 0px 100px 10px;
+  }
+  > li:first-child {
+    border-radius: 10px 0px 0px 0px;
   }
 
   &__active {
@@ -94,7 +97,7 @@ export default {
     color: white;
   }
 }
-@media screen and (max-width: 930px) {
+@media screen and (max-width: 1130px) {
   .drop-down {
     position: static;
   }

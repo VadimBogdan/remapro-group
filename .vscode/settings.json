@@ -4,20 +4,21 @@
     "source.fixAll.eslint": true
   },
   "editor.formatOnSave": false,
-  //"editor.defaultFormatter": "esbenp.prettier-vscode",
-  //"editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "[vue]": {
-   // "editor.formatOnSave": true,
     "editor.defaultFormatter": "octref.vetur",
-    //"editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "prettier.semi": false,
   "editor.codeActionsOnSaveTimeout": 2000,
   "vetur.format.defaultFormatter.js": "prettier-eslint",
   "vetur.format.defaultFormatter.html": "prettyhtml",
-  //"prettier.proseWrap": "never"
-  //"vetur.format.defaultFormatter.html": "prettier",
-  // "prettier.disableLanguages": [
-  //   "js"
-  // ],
+
+  "workbench.colorCustomizations": {
+    "editorSuggestWidget.background": "#4f6a85",
+    "editorSuggestWidget.foreground": "#ffffff",
+    "editorSuggestWidget.selectedBackground": "#95a5a6",
+    /**
+    for intellisense hover item color
+    */
+    "list.hoverForeground": "#000"
+  }
 }

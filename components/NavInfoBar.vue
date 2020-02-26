@@ -1,7 +1,7 @@
 <template>
   <div ref="navContainer">
     <div class="infobar-container">
-      <div ref="mobileMenu" :class="mobileMenuClass" class="mobile-menu" @click.prevent="mobileMenuHandler()">
+      <div ref="mobileMenu" :class="mobileMenuClass" class="mobile-menu" @click.prevent="mobileMenuHandler">
         <a @click.prevent></a>
       </div>
       <a class="remapro-logo">
@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     mobileMenuHandler() {
-      if (window.matchMedia('(min-width: 980px)').matches) {
+      if (window.matchMedia('(min-width: 1130px)').matches) {
         return
       }
       this.mobileMenuIndicator = !this.mobileMenuIndicator
@@ -152,7 +152,8 @@ export default {
       } else {
         this.hasScrollBar = false
       }
-      if (window.matchMedia('(min-width: 980px)').matches) {
+
+      if (window.matchMedia('(min-width: 1130px)').matches) {
         this.$refs.nav.style.display = 'block'
         document.documentElement.style.overflow = ''
         this.mobileMenuIndicator = false
@@ -309,7 +310,7 @@ export default {
 
   position: relative;
 
-  margin: 0 325px;
+  margin: 0 255px;
 
   > *:not(.choose-language):not(.mobile-menu) {
     top: 50%;
@@ -361,7 +362,7 @@ export default {
     margin: 0;
   }
 }
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 1130px) {
   .choose-language {
     display: none;
 
@@ -398,39 +399,54 @@ export default {
     display: none;
   }
 }
-@media screen and (max-width: 1615px) {
+@media screen and (max-width: 1630px) {
   .infobar-container {
-    margin: 0 300px;
+    margin: 0 230px;
   }
 }
-@media screen and (max-width: 1570px) {
+@media screen and (max-width: 1580px) {
   .infobar-container {
-    margin: 0 250px;
+    margin: 0 205px;
   }
 }
-@media screen and (max-width: 1470px) {
+@media screen and (max-width: 1530px) {
   .infobar-container {
-    margin: 0 200px;
+    margin: 0 180px;
   }
 }
-@media screen and (max-width: 1370px) {
+@media screen and (max-width: 1480px) {
   .infobar-container {
-    margin: 0 150px;
+    margin: 0 155px;
   }
 }
-@media screen and (max-width: 1270px) {
+@media screen and (max-width: 1430px) {
   .infobar-container {
-    margin: 0 100px;
+    margin: 0 130px;
+  }
+}
+@media screen and (max-width: 1380px) {
+  .infobar-container {
+    margin: 0 105px;
+  }
+}
+@media screen and (max-width: 1330px) {
+  .infobar-container {
+    margin: 0 80px;
+  }
+}
+@media screen and (max-width: 1280px) {
+  .infobar-container {
+    margin: 0 55px;
+  }
+}
+@media screen and (max-width: 1230px) {
+  .infobar-container {
+    margin: 0 30px;
   }
 }
 @media screen and (max-width: 1180px) {
   .infobar-container {
-    margin: 0 50px;
-  }
-}
-@media screen and (max-width: 1080px) {
-  .infobar-container {
-    margin: 0;
+    margin: 0 5px;
   }
 }
 </style>

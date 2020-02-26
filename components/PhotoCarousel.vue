@@ -9,7 +9,7 @@
       @touchmove="touch($event)"
       @touchend="touchEnd($event)"
       @touchcancel="touchEnd($event)"
-      @mousedown="mouseDown($event)"
+      @mousedown.prevent="mouseDown($event)"
       @mouseup="mouseUp($event)"
       @mousemove="mouseMove($event)"
       @mouseout="mouseOut($event)"
@@ -63,6 +63,7 @@ import CarouselImage from '@/components/small/carousel/CarouselImage.vue'
 import ImageSwitcher from '@/components/small/carousel/ImageSwitcher.vue'
 
 export default {
+  // TODO: fix carousel
   components: {
     Arrow,
     CarouselImage,
@@ -72,11 +73,13 @@ export default {
   data() {
     return {
       imagesElements: [],
-      path: 0,
+      x1: 0,
+      // distance: 0,
       twisted: false,
       isMouseDown: false,
       activeIndex: 0,
       imageWidth: 1663,
+      shift: 0,
       outbound: false,
       // backFrom: 0,
       // backTo: 3,
@@ -174,11 +177,11 @@ export default {
       ]
     }
   },
-  updated() {
-    this.getMaxLeftScrolling()
-    this.imagesElements[this.activeIndex].classList.add('active')
-    // this.frontFrom = this.imagesElements.length - 1
-  },
+  // updated() {
+  //   this.getMaxLeftScrolling()
+  //   this.imagesElements[this.activeIndex].classList.add('active')
+  //   // this.frontFrom = this.imagesElements.length - 1
+  // },
   // beforeDestroy() {
   //   window.removeEventListener('resize', this.getMaxLeftScrolling)
   //   window.removeEventListener('load', this.getMaxLeftScrolling)
@@ -187,21 +190,20 @@ export default {
   mounted() {
     window.addEventListener('resize', this.getMaxLeftScrolling)
     window.addEventListener('load', this.getMaxLeftScrolling)
+
     this.$nuxt.$on('routeChanged', this.getMaxLeftScrolling)
     setTimeout(this.getMaxLeftScrolling, 1)
 
-    this.getMaxLeftScrolling()
+    // this.getMaxLeftScrolling()
     this.imagesElements = Array.from(this.$el.querySelectorAll('.carouselItem:not(.clone)'))
     this.imagesElements[this.activeIndex].classList.add('active')
-    this.imagesElements.forEach(el => (el.style.width = `${this.imageWidth}px`))
-    this.frontFrom = this.imagesElements.length - 1
+    // this.imagesElements.forEach(el => (el.style.width = `${this.imageWidth}px`))
+    // this.frontFrom = this.imagesElements.length - 1
 
     this.toActive()
 
     this.photoCarouselActionsDebounced = this.throttlingSpecial(
       {
-        // forward: this.twistCarousel.bind(this, 'forward'),
-        // backward: this.twistCarousel.bind(this, 'backward'),
         switch: this.switchChangeImage,
         swipeClear: this.swipeEffectsClear
       },
@@ -210,8 +212,8 @@ export default {
   },
   methods: {
     toActive() {
-      const translate = -((this.activeIndex + 1) * this.imageWidth)
-      this.$refs.container.style.transform = `translateX(${translate}px)`
+      this.shift = -((this.activeIndex + 1) * this.imageWidth)
+      this.$refs.container.style.transform = `translateX(${this.shift}px)`
     },
     touch(e) {
       if (this.isSwipeReady) {
@@ -222,30 +224,32 @@ export default {
       this.photoCarouselActionsDebounced('swipeClear')
     },
     mouseOut(e) {
-      if (!this.isMouseDown) {
+      if (!this.isMouseDown || !this.isSwipeReady) {
         return
       }
       this.isMouseDown = false
       this.photoCarouselActionsDebounced('swipeClear')
     },
     mouseMove(e) {
-      if (!this.isMouseDown) {
+      if (!this.isMouseDown || !this.isSwipeReady) {
         return
       }
       this.swipeEffects(e.clientX)
     },
     mouseUp(e) {
-      if (this.isSwipeReady) {
-        this.swipeEffects(e.clientX)
+      if (!this.isSwipeReady) {
+        return
       }
       this.isMouseDown = false
+      this.swipeEffects(e.clientX)
       this.photoCarouselActionsDebounced('swipeClear')
     },
     mouseDown(e) {
-      if (this.isSwipeReady) {
-        this.swipeEffects(e.clientX)
+      if (!this.isSwipeReady) {
+        return
       }
       this.isMouseDown = true
+      this.swipeEffects(e.clientX)
     },
     getMaxLeftScrolling() {
       if (!document.querySelector('.carousel').clientWidth) {
@@ -253,6 +257,8 @@ export default {
         return
       }
       this.imageWidth = document.querySelector('.carousel').clientWidth
+
+      Array.from(this.$el.querySelectorAll('.carouselItem')).forEach(el => (el.style.width = `${this.imageWidth}px`))
     }
   }
 }
@@ -273,6 +279,7 @@ export default {
   &-images {
     display: inline-flex;
     transform-origin: center;
+    max-width: 8315px;
   }
 
   margin: 0 auto;

@@ -130,7 +130,11 @@ export default {
 .carouselItem {
   position: relative;
   // transition: all 650ms ease-in-out;
+
   user-select: none;
+  -moz-user-select: none;
+  // pointer-events: none;
+
   // z-index: -1;
   width: 1663px;
   height: 450px;
@@ -179,6 +183,10 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+
+    user-select: none;
+    -moz-user-select: none;
+
     &--more {
       user-select: none;
       position: absolute;
